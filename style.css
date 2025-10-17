@@ -6,3 +6,73 @@ Description: Thème WordPress personnalisé pour le site Nathalie Mota.
 Version: 1.0
 Text Domain: nathalie-mota
 */
+
+/* ========== HEADER ========== */
+.site-header {
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 20px 0;
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .site-title {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-style: italic;
+    color: #E00000;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .menu {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+  }
+  .menu a {
+    font-family: 'Space Mono', monospace;
+    text-decoration: none;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .menu a:hover {
+    color: #E00000;
+  }
+  
+  /* ========== FOOTER ========== */
+  .site-footer {
+    border-top: 1px solid #000;
+    text-align: center;
+    padding: 20px 0;
+  }
+  .footer-menu {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 0;
+    margin: 0 0 10px;
+  }
+  .footer-menu a {
+    text-decoration: none;
+    color: #000;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .footer-menu a:hover {
+    color: #E00000;
+  }
+  .footer-copy {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: #555;
+  }
+  

@@ -14,6 +14,8 @@ get_header(); ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
                 <header class="page-header">
                     <h1 class="page-title"><?php the_title(); ?></h1>
+                    <a href="#" data-modal="contact" class="btn-open-contact">Contact</a>
+
                 </header>
 
                 <div class="page-content">

@@ -1,78 +1,539 @@
 /*
 Theme Name: Nathalie Mota
 Theme URI: https://github.com/BrianV87/NathalieMota
-Author: BrianV87
-Description: Thème WordPress personnalisé pour le site Nathalie Mota.
-Version: 1.0
+Author: Brian Ventura
+Description: Thème personnalisé selon la maquette Figma Nathalie Mota
+Version: 1.2
 Text Domain: nathalie-mota
 */
 
-/* ========== HEADER ========== */
-.site-header {
+/* =====================================
+   VARIABLES & BASE GLOBALE
+===================================== */
+:root {
+    --red: #E00000;
+    --red-2: #FE5858;
+    --red-3: #FFD6D6;
+    --black: #000000;
+    --blue: #313144;
+    --gray: #C4C4C4;
+    --gray-2: #D8D8D8;
+    --gray-3: #E5E5E5;
+
+    --container: 1140px;
+    --header-h: 72px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    color: var(--black);
     background: #fff;
-    border-bottom: 1px solid #ddd;
-    padding: 20px 0;
-  }
-  .header-inner {
-    max-width: 1100px;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.4;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+.container {
+    max-width: var(--container);
     margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* =====================================
+     TYPOGRAPHIE
+  ===================================== */
+h1,
+h2,
+h3,
+.photo-desc {
+    font-family: "Space Mono", monospace;
+    text-transform: uppercase;
+}
+
+h1 {
+    font-weight: 700;
+    font-style: italic;
+    font-size: 96px;
+    line-height: 100%;
+    margin-bottom: 12px;
+}
+
+h2 {
+    font-weight: 400;
+    font-style: italic;
+    font-size: 66px;
+    line-height: 58px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    font-weight: 400;
+    font-size: 18px;
+    letter-spacing: .1em;
+    margin-bottom: 8px;
+}
+
+.photo-desc {
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: .1em;
+}
+
+p {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+/* =====================================
+     HEADER
+  ===================================== */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-h);
+}
+
+.brand img {
+    display: block;
+    width: auto;
+    height: 16px;
+}
+
+.site-nav {
+    display: block;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    list-style: none;
+}
+
+.menu a {
+    font-family: "Space Mono", monospace;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    color: var(--black);
+    transition: color 0.3s ease;
+}
+
+.menu a:hover {
+    color: var(--red);
+}
+
+/* ===== BURGER MOBILE ===== */
+.burger {
+    display: none;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+}
+
+.burger span {
+    position: absolute;
+    left: 9px;
+    right: 9px;
+    height: 2px;
+    background: #000;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.burger span:nth-child(1) {
+    top: 14px;
+}
+
+.burger span:nth-child(2) {
+    top: 21px;
+}
+
+.burger span:nth-child(3) {
+    bottom: 14px;
+}
+
+.burger.is-active span:nth-child(1) {
+    transform: rotate(45deg);
+    top: 21px;
+}
+
+.burger.is-active span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger.is-active span:nth-child(3) {
+    transform: rotate(-45deg);
+    bottom: 21px;
+}
+
+/* =====================================
+     MENU MOBILE
+  ===================================== */
+/* ===============================
+   MENU MOBILE FINAL — CORRIGÉ
+================================= */
+.mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: var(--red);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    transform: translateX(100%);
+    transition: transform 0.35s ease-in-out;
+    z-index: 9999;
+}
+
+.mobile-menu.is-open {
+    transform: translateX(0);
+}
+
+/* Header (logo + croix) */
+.mobile-menu-header {
+    height: var(--header-h);
+    background: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  .site-title {
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    font-style: italic;
-    color: #E00000;
-    text-decoration: none;
-    text-transform: uppercase;
-  }
-  .menu {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-    margin: 0;
-    padding: 0;
-  }
-  .menu a {
-    font-family: 'Space Mono', monospace;
-    text-decoration: none;
+    padding: 0 24px;
+}
+
+.mobile-menu-header img {
+    width: auto;
+}
+
+.mobile-menu-close {
+    border: none;
+    background: transparent;
+    font-size: 28px;
     color: #000;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-  .menu a:hover {
-    color: #E00000;
-  }
-  
-  /* ========== FOOTER ========== */
-  .site-footer {
-    border-top: 1px solid #000;
-    text-align: center;
-    padding: 20px 0;
-  }
-  .footer-menu {
-    list-style: none;
+    cursor: pointer;
+}
+
+/* Corps du menu */
+.mobile-menu-nav {
+    flex: 1;
     display: flex;
     justify-content: center;
-    gap: 40px;
+    align-items: center;
+}
+
+.menu-mobile {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    margin: 0;
     padding: 0;
-    margin: 0 0 10px;
-  }
-  .footer-menu a {
+}
+
+.menu-mobile li {
+    list-style: none;
+}
+
+.menu-mobile a {
+    color: #fff;
     text-decoration: none;
-    color: #000;
-    font-family: 'Space Mono', monospace;
+    font-family: "Space Mono", monospace;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-  }
-  .footer-menu a:hover {
-    color: #E00000;
-  }
-  .footer-copy {
-    font-family: 'Poppins', sans-serif;
-    font-size: 12px;
-    color: #555;
+    font-size: 44px;
+    font-weight: 400;
+    transition: opacity 0.25s ease;
+}
+
+.menu-mobile a:hover {
+    opacity: 0.7;
+}
+
+/* Décalage automatique sous la barre admin WP */
+body.admin-bar .mobile-menu {
+    top: 32px;
+}
+
+@media (max-width: 782px) {
+    body.admin-bar .mobile-menu {
+        top: 46px;
+    }
+}
+
+/* =====================================
+     FOOTER
+  ===================================== */
+.site-footer {
+    background: #fff;
+    border-top: 1px solid #000;
+    text-align: center;
+    margin-top: auto;
+}
+
+.footer-line {
+    border: none;
+    border-top: 1px solid #000;
+    margin: 0;
+}
+
+.footer-inner {
+    padding: 18px 24px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-menu {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+    margin: 0 0 10px;
+    padding: 0;
+}
+
+.footer-menu a {
+    text-decoration: none;
+    color: #000;
+    font-family: "Space Mono", monospace;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.footer-menu a:hover {
+    color: var(--red);
+}
+
+/* ======= Responsive footer ======= */
+@media (max-width: 640px) {
+    .footer-menu {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .footer-menu a {
+        font-size: 14px;
+        letter-spacing: .08em;
+    }
+}
+
+
+/* =====================================
+     MODALE DE CONTACT
+  ===================================== */
+  .contact-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    z-index: 300;
   }
   
+  .contact-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* --- Conteneur principal --- */
+  .contact-modal {
+    position: relative;
+    background: #fff;
+    width: min(700px, 92vw);
+    border: 5px solid var(--black);
+    border-radius: 0;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 80px 10px;
+  }
+  
+  /* --- Image du header --- */
+  .modal-header-image {
+    position: relative;
+    width: 1000px;
+    height: auto;
+    margin-top: 5px;
+    margin-left: -5px; /* compense la bordure */
+    margin-right: -5px;
+  }
+  
+  .modal-header-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+  
+  /* --- Bouton de fermeture --- */
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 26px;
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    color: var(--black);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    z-index: 2;
+  }
+  
+  .modal-close:hover {
+    transform: scale(1.2);
+  }
+  
+  /* --- Corps du formulaire --- */
+  .modal-body {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 40px;
+  }
+  
+  /* --- FORMULAIRE --- */
+  .wpcf7-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-align: start;
+  }
+  
+  .wpcf7-form label {
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--black);
+    margin-bottom: 5px;
+    text-align: start;
+  }
+  
+  .wpcf7-form input[type="text"],
+  .wpcf7-form input[type="email"],
+  .wpcf7-form textarea {
+    width: 100%;
+    border: 1px solid #C4C4C4;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    outline: none;
+    color: var(--black);
+    background-color: #fff;
+    transition: border 0.2s ease;
+  }
+  
+  .wpcf7-form input:focus,
+  .wpcf7-form textarea:focus {
+    border-color: var(--black);
+  }
+  
+  .wpcf7-form textarea {
+    min-height: 160px;
+    resize: vertical;
+  }
+  
+  /* --- Bouton Envoyer --- */
+  .wpcf7-form .wpcf7-submit {
+    display: inline-block;
+    width: 100%;
+    background: #D8D8D8;
+    color: var(--black);
+    border: none;
+    border-radius: 5px;
+    padding: 16px 0;
+    font-family: "Space Mono", monospace;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  
+  .wpcf7-form .wpcf7-submit:hover {
+    background: var(--black);
+    color: #fff;
+  }
+  
+  /* --- Responsive --- */
+  @media (max-width: 640px) {
+    .contact-modal {
+      padding: 0 28px 40px;
+    }
+  
+    .modal-body {
+      width: 100%;
+      margin-top: 30px;
+    }
+  
+    .wpcf7-form textarea {
+      min-height: 120px;
+    }
+  }
+  
+
+/* =====================================
+     RESPONSIVE
+  ===================================== */
+@media (max-width: 1024px) {
+    .site-nav {
+        display: none;
+    }
+
+    .burger {
+        display: block;
+    }
+}
+
+@media (max-width: 640px) {
+    h1 {
+        font-size: 27.59px;
+    }
+
+    h2 {
+        font-size: 46px;
+        line-height: 48px;
+    }
+
+    .menu-mobile a {
+        font-size: 36px;
+    }
+}

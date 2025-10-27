@@ -1,0 +1,66 @@
+:root {
+    --red: #E00000;
+    --red-2: #FE5858;
+    --red-3: #FFD6D6;
+    --black: #000;
+    --blue: #313144;
+    --gray: #C4C4C4;
+    --gray-2: #D8D8D8;
+    --gray-3: #E5E5E5;
+    --container: 1350px;
+    --header-h: 72px
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0
+}
+
+html {
+    scroll-behavior: smooth
+}
+
+body {
+    color: var(--black);
+    background: #fff;
+    font-family: Poppins, sans-serif;
+    line-height: 1.4;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh
+}
+
+main {
+    flex: 1
+}
+
+.container {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 24px
+}
+
+/* Typographie de base (hors headings) */
+p {
+    font-family: Poppins, sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    margin-bottom: 12px
+}
+
+.btn-contact {
+    width: 50%;
+    text-align: center;
+    padding: 15px;
+    background-color: #D8D8D8;
+    color: black;
+    border-radius: 3px;
+    transition: background-color .3s ease, color .3s ease;
+}
+
+.btn-contact:hover {
+    background-color: black!important;
+    color: white!important;
+}

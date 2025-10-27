@@ -120,6 +120,14 @@ p {
     height: var(--header-h);
 }
 
+.site-header .header-inner {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+}
+
+
 .brand img {
     display: block;
     width: auto;
@@ -200,9 +208,7 @@ p {
 /* =====================================
      MENU MOBILE
   ===================================== */
-/* ===============================
-   MENU MOBILE FINAL — CORRIGÉ
-================================= */
+
 .mobile-menu {
     position: fixed;
     inset: 0;
@@ -352,7 +358,7 @@ body.admin-bar .mobile-menu {
 /* =====================================
      MODALE DE CONTACT
   ===================================== */
-  .contact-overlay {
+.contact-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.7);
@@ -362,15 +368,15 @@ body.admin-bar .mobile-menu {
     visibility: hidden;
     transition: opacity 0.25s ease, visibility 0.25s ease;
     z-index: 300;
-  }
-  
-  .contact-overlay.is-open {
+}
+
+.contact-overlay.is-open {
     opacity: 1;
     visibility: visible;
-  }
-  
-  /* --- Conteneur principal --- */
-  .contact-modal {
+}
+
+/* --- Conteneur principal --- */
+.contact-modal {
     position: relative;
     background: #fff;
     width: min(700px, 92vw);
@@ -382,27 +388,28 @@ body.admin-bar .mobile-menu {
     flex-direction: column;
     align-items: center;
     padding: 0 80px 10px;
-  }
-  
-  /* --- Image du header --- */
-  .modal-header-image {
+}
+
+/* --- Image du header --- */
+.modal-header-image {
     position: relative;
     width: 1000px;
     height: auto;
     margin-top: 5px;
-    margin-left: -5px; /* compense la bordure */
+    margin-left: -5px;
+    /* compense la bordure */
     margin-right: -5px;
-  }
-  
-  .modal-header-image img {
+}
+
+.modal-header-image img {
     width: 100%;
     height: auto;
     display: block;
     object-fit: cover;
-  }
-  
-  /* --- Bouton de fermeture --- */
-  .modal-close {
+}
+
+/* --- Bouton de fermeture --- */
+.modal-close {
     position: absolute;
     top: 20px;
     right: 26px;
@@ -413,30 +420,30 @@ body.admin-bar .mobile-menu {
     cursor: pointer;
     transition: transform 0.2s ease;
     z-index: 2;
-  }
-  
-  .modal-close:hover {
+}
+
+.modal-close:hover {
     transform: scale(1.2);
-  }
-  
-  /* --- Corps du formulaire --- */
-  .modal-body {
+}
+
+/* --- Corps du formulaire --- */
+.modal-body {
     width: 60%;
     display: flex;
     flex-direction: column;
     gap: 24px;
     margin-top: 40px;
-  }
-  
-  /* --- FORMULAIRE --- */
-  .wpcf7-form {
+}
+
+/* --- FORMULAIRE --- */
+.wpcf7-form {
     display: flex;
     flex-direction: column;
     gap: 18px;
     text-align: start;
-  }
-  
-  .wpcf7-form label {
+}
+
+.wpcf7-form label {
     font-family: "Space Mono", monospace;
     font-size: 12px;
     text-transform: uppercase;
@@ -444,11 +451,11 @@ body.admin-bar .mobile-menu {
     color: var(--black);
     margin-bottom: 5px;
     text-align: start;
-  }
-  
-  .wpcf7-form input[type="text"],
-  .wpcf7-form input[type="email"],
-  .wpcf7-form textarea {
+}
+
+.wpcf7-form input[type="text"],
+.wpcf7-form input[type="email"],
+.wpcf7-form textarea {
     width: 100%;
     border: 1px solid #C4C4C4;
     border-radius: 10px;
@@ -459,20 +466,20 @@ body.admin-bar .mobile-menu {
     color: var(--black);
     background-color: #fff;
     transition: border 0.2s ease;
-  }
-  
-  .wpcf7-form input:focus,
-  .wpcf7-form textarea:focus {
+}
+
+.wpcf7-form input:focus,
+.wpcf7-form textarea:focus {
     border-color: var(--black);
-  }
-  
-  .wpcf7-form textarea {
+}
+
+.wpcf7-form textarea {
     min-height: 160px;
     resize: vertical;
-  }
-  
-  /* --- Bouton Envoyer --- */
-  .wpcf7-form .wpcf7-submit {
+}
+
+/* --- Bouton Envoyer --- */
+.wpcf7-form .wpcf7-submit {
     display: inline-block;
     width: 100%;
     background: #D8D8D8;
@@ -486,29 +493,29 @@ body.admin-bar .mobile-menu {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
-  }
-  
-  .wpcf7-form .wpcf7-submit:hover {
+}
+
+.wpcf7-form .wpcf7-submit:hover {
     background: var(--black);
     color: #fff;
-  }
-  
-  /* --- Responsive --- */
-  @media (max-width: 640px) {
+}
+
+/* --- Responsive --- */
+@media (max-width: 640px) {
     .contact-modal {
-      padding: 0 28px 40px;
+        padding: 0 28px 40px;
     }
-  
+
     .modal-body {
-      width: 100%;
-      margin-top: 30px;
+        width: 100%;
+        margin-top: 30px;
     }
-  
+
     .wpcf7-form textarea {
-      min-height: 120px;
+        min-height: 120px;
     }
-  }
-  
+}
+
 
 /* =====================================
      RESPONSIVE
@@ -536,4 +543,129 @@ body.admin-bar .mobile-menu {
     .menu-mobile a {
         font-size: 36px;
     }
+}
+
+/* =========================================================
+   SINGLE PHOTO
+========================================================= */
+
+.single-photo__row {
+    display: grid;
+    grid-template-columns: 42% 58%;
+    gap: 3vw;
+    margin-bottom: 5vh
+}
+
+.single-photo__row.first-row {
+    align-items: end;
+}
+
+.single-photo__row.first-row .single-photo__col-left {
+    border-bottom: 1px solid #111;
+}
+
+
+.content-bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.single-photo__col-left {
+    border-bottom: 1px solid #111;
+}
+
+/* TRAIT UNIQUEMENT COL GAUCHE */
+
+.single-photo__col-right img {
+    width: 100%;
+    height: auto;
+    max-height: 65vh;
+    object-fit: cover;
+    display: block;
+}
+
+
+.btn-contact {
+    background: #D8D8D8;
+    padding: 12px 36px;
+    display: inline-block;
+    text-transform: uppercase;
+    font-family: "Space Mono";
+    border: none;
+    cursor: pointer;
+}
+
+.single-photo__row.second-row {
+    margin-top: 4vh;
+}
+
+.bottom-nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 2rem;
+}
+
+.preview-thumb img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+}
+
+.arrows {
+    display: flex;
+    gap: 1.6rem;
+}
+
+.arrows img {
+    width: 24px;
+    transition: .2s
+}
+
+.arrows img:hover {
+    opacity: .6;
+    transform: translateY(-2px)
+}
+
+.single-photo__divider {
+    border-top: 1px solid #111;
+    margin: 5vh 0;
+}
+
+/* TRAIT GLOBAL APRÈS BLOC B */
+
+.related-photos__list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2vw;
+}
+
+.related-photos__list img {
+    height: 40vh;
+    width: 100%;
+    object-fit: cover;
+}
+
+/* ======= CORRECTION IMAGE ======= */
+.single-photo__col-right {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* ======= H1 plus petit ======= */
+.single-photo__col-left h1 {
+    font-size: 42px;              /* taille maquette fixe */
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+/* ======= Titre "Vous aimerez aussi" plus petit ======= */
+.related-photos h2 {
+    font-size: 20px;
+    font-style: italic;
+    font-family: "Space Mono", monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
 }

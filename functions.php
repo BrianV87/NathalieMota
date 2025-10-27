@@ -31,18 +31,19 @@ function nathalie_mota_assets()
     // Polices Google
     wp_enqueue_style(
         'nm-fonts',
-        'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&family=Space+Mono:ital,wght@0,400;1,700&display=swap',
+        'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap',
         [],
         null
-    );
+    );    
 
     // Feuille de style principale
     wp_enqueue_style(
         'nm-main',
-        get_template_directory_uri() . '/style.css',
+        get_template_directory_uri() . '/assets/css/main.css',
         ['nm-fonts'],
-        filemtime(get_template_directory() . '/style.css')
+        filemtime(get_template_directory() . '/assets/css/main.css')
     );
+
 
     // JavaScript principal (on le créera juste après)
     wp_enqueue_script(
@@ -260,7 +261,7 @@ add_action('save_post_photo', 'nm_save_photo_fields');
 // ===============================
 // Optimisations images & Green Code
 // ===============================
-add_filter('big_image_size_threshold', function() {
+add_filter('big_image_size_threshold', function () {
     return 2560; // Limite la taille des images originales
 });
 

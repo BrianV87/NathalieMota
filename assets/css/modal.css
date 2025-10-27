@@ -1,0 +1,139 @@
+.contact-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .7);
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s, visibility .25s;
+    z-index: 300
+}
+
+.contact-overlay.is-open {
+    opacity: 1;
+    visibility: visible
+}
+
+.contact-modal {
+    position: relative;
+    background: #fff;
+    width: min(700px, 92vw);
+    border: 5px solid var(--black);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .25);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 80px 10px
+}
+
+.modal-header-image {
+    position: relative;
+    width: 1000px;
+    margin: 5px -5px 0
+}
+
+.modal-header-image img {
+    width: 100%;
+    display: block;
+    object-fit: cover
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 26px;
+    border: 0;
+    background: 0;
+    font-size: 24px;
+    color: var(--black);
+    cursor: pointer;
+    transition: transform .2s;
+    z-index: 2
+}
+
+.modal-close:hover {
+    transform: scale(1.2)
+}
+
+.modal-body {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 40px
+}
+
+.wpcf7-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-align: start
+}
+
+.wpcf7-form label {
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--black);
+    margin-bottom: 5px
+}
+
+.wpcf7-form input[type=text], .wpcf7-form input[type=email], .wpcf7-form textarea {
+    width: 100%;
+    border: 1px solid #C4C4C4;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    outline: 0;
+    color: var(--black);
+    background: #fff;
+    transition: border .2s
+}
+
+.wpcf7-form input:focus, .wpcf7-form textarea:focus {
+    border-color: var(--black)
+}
+
+.wpcf7-form textarea {
+    min-height: 160px;
+    resize: vertical
+}
+
+.wpcf7-form .wpcf7-submit {
+    width: 100%;
+    background: #D8D8D8;
+    color: var(--black);
+    border: 0;
+    border-radius: 5px;
+    padding: 16px 0;
+    font-family: "Space Mono", monospace;
+    font-size: 14px;
+    letter-spacing: .06em;
+    cursor: pointer;
+    transition: .3s;
+    text-align: center
+}
+
+.wpcf7-form .wpcf7-submit:hover {
+    background: var(--black);
+    color: #fff
+}
+
+@media(max-width:640px) {
+    .contact-modal {
+        padding: 0 28px 40px
+    }
+
+    .modal-body {
+        width: 100%;
+        margin-top: 30px
+    }
+
+    .wpcf7-form textarea {
+        min-height: 120px
+    }
+}

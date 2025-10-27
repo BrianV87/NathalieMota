@@ -1,0 +1,56 @@
+/* DESKTOP (par défaut) */
+.home-hero {
+    position: relative;
+    width: 100%;
+    height: 90vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* TABLETTE (≤1024px) */
+@media (max-width:1024px) {
+    .home-hero {
+        height: 65vh;
+    }
+}
+
+/* MOBILE (≤640px) */
+@media (max-width:640px) {
+    .home-hero {
+        height: 50vh;
+    }
+}
+
+
+.home-hero__inner h1 {
+    font-family: "Space Mono", monospace;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: 6vw;               /* desktop default */
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 3px #fff;
+    letter-spacing: .05em;
+}
+
+/* TABLETTE (≤ 1024px) */
+@media (max-width:1024px) {
+    .home-hero__inner h1 {
+        font-size: 6vw;
+        -webkit-text-stroke: 2px #fff;
+        text-align: center;
+    }
+}
+
+/* MOBILE (≤ 640px) */
+@media (max-width:640px) {
+    .home-hero__inner h1 {
+        font-size: 7vw;
+        -webkit-text-stroke: 1px #fff;
+        text-align: center;
+    }
+}

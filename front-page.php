@@ -44,13 +44,14 @@ if (!$hero_url) {
 
     <!-- CONTENU -->
     <section class="home-content container">
-        <div class="related-photos__list">
+        <div class="related-photos__list js-photo-list">
             <?php
             $photos = new WP_Query([
                 'post_type'      => 'photo',
-                'posts_per_page' => -1,
+                'posts_per_page' => 8,
                 'orderby'        => 'date',
                 'order'          => 'DESC',
+                'paged'          => 1,
             ]);
 
             if ($photos->have_posts()) :
@@ -63,6 +64,10 @@ if (!$hero_url) {
             ?>
         </div>
 
+        <!-- BOUTON LOAD MORE -->
+        <div class="load-more-wrapper">
+            <button id="load-more" class="btn-load-more">Charger plus</button>
+        </div>
 
     </section>
 

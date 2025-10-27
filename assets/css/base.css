@@ -61,6 +61,13 @@ p {
 }
 
 .btn-contact:hover {
-    background-color: black!important;
-    color: white!important;
+    background-color: black !important;
+    color: white !important;
+}
+
+.load-more-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 3rem 0;
 }

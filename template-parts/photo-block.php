@@ -7,6 +7,8 @@
 
 if (! isset($photo) || ! $photo instanceof WP_Post) return;
 ?>
-<a href="<?= esc_url(get_permalink($photo->ID)) ?>" class="photo-block">
+<a href="<?= esc_url(get_permalink($photo->ID)) ?>"
+    class="photo-block"
+    data-id="<?= $photo->ID ?>">
     <?= get_the_post_thumbnail($photo->ID, 'full'); ?>
 </a>

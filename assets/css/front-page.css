@@ -11,6 +11,40 @@
     justify-content: center;
 }
 
+.btn-load-more {
+    width: 20%;
+    text-align: center;
+    padding: 15px;
+    background-color: #D8D8D8;
+    color: black;
+    border: none;
+    transition: background-color .3s ease, color .3s ease;
+    font-family: "Space Mono", monospace;
+    font-weight: 400;
+    letter-spacing: .03em;
+    cursor: pointer;
+}
+
+.btn-load-more:hover {
+    background-color: black!important;
+    color: white!important;
+    border: none!important;
+}
+
+/* TABLETTE <= 1024px */
+@media (max-width:1024px){
+    .btn-load-more {
+        width: 50%;
+    }
+}
+
+/* MOBILE <= 640px */
+@media (max-width:640px){
+    .btn-load-more {
+        width: 50%;
+    }
+}
+
 /* TABLETTE (≤1024px) */
 @media (max-width:1024px) {
     .home-hero {
@@ -30,7 +64,8 @@
     font-family: "Space Mono", monospace;
     font-style: italic;
     text-transform: uppercase;
-    font-size: 6vw;               /* desktop default */
+    font-size: 6vw;
+    /* desktop default */
     font-weight: 700;
     color: transparent;
     -webkit-text-stroke: 3px #fff;

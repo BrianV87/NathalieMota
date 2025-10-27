@@ -1,6 +1,6 @@
 <?php
 
-/** Single Photo Template Refactored */
+/** Single Photo Template  **/
 get_header();
 if (have_posts()) :
     while (have_posts()) : the_post();
@@ -64,21 +64,20 @@ if (have_posts()) :
                     <p>Cette photo vous intéresse ?</p>
                     <a class="btn-contact" data-modal="contact" data-photo-ref="<?= esc_attr($reference) ?>">Contact</a>
                 </div>
-
                 <div class="second-right">
-                    <?php if ($next_id): ?>
+                    <?php if ($total > 1 && $next_id && $next_id != $current_id): ?>
                         <a class="second-thumb" href="<?= esc_url(get_permalink($next_id)) ?>">
                             <?= get_the_post_thumbnail($next_id, 'thumbnail'); ?>
                         </a>
                     <?php endif; ?>
-
                     <div class="second-arrows">
-                        <a href="<?= esc_url(get_permalink($prev_id)) ?>"><img src="<?= esc_url(get_stylesheet_directory_uri() . '/assets/images/Line-6.png') ?>" alt=""></a>
-                        <a href="<?= esc_url(get_permalink($next_id)) ?>"><img src="<?= esc_url(get_stylesheet_directory_uri() . '/assets/images/Line-7.png') ?>" alt=""></a>
+                        <?php if ($total > 1): ?>
+                            <a href="<?= esc_url(get_permalink($prev_id)) ?>"><img src="<?= esc_url(get_stylesheet_directory_uri() . '/assets/images/Line-6.png') ?>" alt=""></a>
+                            <a href="<?= esc_url(get_permalink($next_id)) ?>"><img src="<?= esc_url(get_stylesheet_directory_uri() . '/assets/images/Line-7.png') ?>" alt=""></a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
-
 
             <div class="single-photo__divider"></div>
 
@@ -90,7 +89,7 @@ if (have_posts()) :
                     $related_photos = get_posts([
                         'post_type'      => 'photo',
                         'posts_per_page' => 2,
-                        'post__not_in'   => [get_the_ID(), $prev_id, $next_id], // exclusions
+                        'post__not_in'   => [$current_id],
                         'tax_query'      => [
                             [
                                 'taxonomy' => 'categorie',
@@ -99,10 +98,8 @@ if (have_posts()) :
                             ],
                         ],
                     ]);
-
                     if ($related_photos) :
                         foreach ($related_photos as $photo) :
-                            // Injection de la variable attendue par le template
                             include locate_template('template-parts/photo-block.php');
                         endforeach;
                     else :
@@ -111,7 +108,6 @@ if (have_posts()) :
                     ?>
                 </div>
             </div>
-
         </main>
 <?php endwhile;
 endif;

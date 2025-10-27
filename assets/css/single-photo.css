@@ -31,7 +31,7 @@
 
 .single-photo__row.first-row .single-photo__col-left {
     border-bottom: 1px solid #111;
-    margin-right: 3rem;
+    margin-right: 1rem;
 }
 
 .content-bottom {
@@ -87,7 +87,8 @@
 .related-photos__list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2vw
+    gap: 1vw;
+    margin-top: 3rem;
 }
 
 .related-photos__list img {
@@ -150,7 +151,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-right: 3rem;
+    padding-right: 1rem;
 }
 
 .second-thumb img {

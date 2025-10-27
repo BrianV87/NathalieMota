@@ -44,7 +44,26 @@ if (!$hero_url) {
 
     <!-- CONTENU -->
     <section class="home-content container">
-        <!-- filtres + loop + infinite scroll ici -->
+        <div class="related-photos__list">
+            <?php
+            $photos = new WP_Query([
+                'post_type'      => 'photo',
+                'posts_per_page' => -1,
+                'orderby'        => 'date',
+                'order'          => 'DESC',
+            ]);
+
+            if ($photos->have_posts()) :
+                while ($photos->have_posts()) : $photos->the_post();
+                    $photo = get_post();
+                    include locate_template('template-parts/photo-block.php');
+                endwhile;
+                wp_reset_postdata();
+            endif;
+            ?>
+        </div>
+
+
     </section>
 
 </main>

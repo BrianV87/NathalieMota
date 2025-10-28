@@ -1,26 +1,16 @@
 <?php
 
 /**
- * Template d'accueil (front-page)
+ * Template pour l'archive des photos (avec filtres)
+ * Aligné sur le rendu du front-page.php et compatible avec les URLs propres
  */
 get_header();
+?>
 
-/** HERO source
- *  1) Si ACF est présent et qu'une image "hero_image" est remplie sur la page d'accueil → on l'utilise
- *  2) Sinon → on prend une photo ALÉATOIRE du CPT "photo"
- */
-$hero_url = '';
-
-$front_id = get_option('page_on_front'); // id de la page d'accueil
-if (function_exists('get_field') && $front_id) {
-    $hero_id = get_field('hero_image', $front_id); // champ ACF: Image (retour = ID)
-    if ($hero_id) {
-        $hero_url = wp_get_attachment_image_url($hero_id, 'full');
-    }
-}
-
-if (!$hero_url) {
-    // Fallback aléatoire
+<main class="home">
+    <!-- HERO (optionnel) -->
+    <?php
+    $hero_url = '';
     $random_photo = get_posts([
         'post_type'      => 'photo',
         'posts_per_page' => 1,
@@ -30,24 +20,21 @@ if (!$hero_url) {
     if (!empty($random_photo)) {
         $hero_url = get_the_post_thumbnail_url($random_photo[0], 'full');
     }
-}
-?>
-
-<main class="home">
-
-    <!-- HERO -->
-    <section class="home-hero" style="<?= $hero_url ? 'background-image:url(' . esc_url($hero_url) . ');' : '' ?>">
-        <div class="home-hero__inner">
-            <h1>PHOTOGRAPHE&nbsp;EVENT</h1>
-        </div>
-    </section>
+    ?>
+    <?php if ($hero_url): ?>
+        <section class="home-hero" style="background-image:url(<?= esc_url($hero_url) ?>);">
+            <div class="home-hero__inner">
+                <h1>PHOTOGRAPHE&nbsp;EVENT</h1>
+            </div>
+        </section>
+    <?php endif; ?>
 
     <!-- CONTENU -->
     <section class="home-content container">
-
+        <!-- Barre de filtres -->
         <div class="filters-bar">
             <div class="filters-left">
-                <!-- Catégories (slug) -->
+                <!-- Catégories -->
                 <div class="dropdown" data-filter="categorie">
                     <button class="dropdown__toggle">
                         <span class="dropdown__label">Catégories</span>
@@ -64,8 +51,7 @@ if (!$hero_url) {
                         <?php endforeach; ?>
                     </div>
                 </div>
-
-                <!-- Formats (slug) -->
+                <!-- Formats -->
                 <div class="dropdown" data-filter="format">
                     <button class="dropdown__toggle">
                         <span class="dropdown__label">Formats</span>
@@ -83,7 +69,6 @@ if (!$hero_url) {
                     </div>
                 </div>
             </div>
-
             <div class="filters-right">
                 <!-- Trier par -->
                 <div class="dropdown" data-filter="ordre">
@@ -99,14 +84,17 @@ if (!$hero_url) {
             </div>
         </div>
 
-
+        <!-- Liste des photos -->
         <div class="related-photos__list js-photo-list">
             <?php
+            // Lire les filtres depuis l'URL propre (ex: /categorie/mariage/format/paysage/)
+            $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+            $pathParts = explode('/', $path);
 
-            // Lire les filtres depuis l'URL
-            $categorie = isset($_GET['categorie']) ? sanitize_title($_GET['categorie']) : '';
-            $format    = isset($_GET['format'])    ? sanitize_title($_GET['format'])    : '';
-            $ordre     = (isset($_GET['ordre']) && $_GET['ordre'] === 'anciennes') ? 'ASC' : 'DESC';
+            // Extraire les valeurs des filtres
+            $categorie = in_array('categorie', $pathParts) ? $pathParts[array_search('categorie', $pathParts) + 1] : '';
+            $format = in_array('format', $pathParts) ? $pathParts[array_search('format', $pathParts) + 1] : '';
+            $ordre = in_array('ordre', $pathParts) ? $pathParts[array_search('ordre', $pathParts) + 1] : 'recentes';
 
             // Construire tax_query
             $tax_query = [];
@@ -128,14 +116,14 @@ if (!$hero_url) {
                 $tax_query['relation'] = 'AND';
             }
 
+            // Requête principale
             $args = [
                 'post_type'      => 'photo',
                 'posts_per_page' => 8,
                 'orderby'        => 'date',
-                'order'          => $ordre,
+                'order'          => ($ordre === 'anciennes') ? 'ASC' : 'DESC',
                 'paged'          => 1,
             ];
-
             if (!empty($tax_query)) {
                 $args['tax_query'] = $tax_query;
             }
@@ -154,14 +142,11 @@ if (!$hero_url) {
             ?>
         </div>
 
-
         <!-- BOUTON LOAD MORE -->
         <div class="load-more-wrapper">
             <button id="load-more" class="btn-load-more">Charger plus</button>
         </div>
-
     </section>
-
 </main>
 
 <?php get_footer(); ?>

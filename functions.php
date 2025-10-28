@@ -293,39 +293,119 @@ add_image_size('photo_large', 1600, 0, false);
 add_image_size('photo_medium', 1024, 0, false);
 add_image_size('photo_small', 600, 0, false);
 
-
 // ================================
-// AJAX INFINITE SCROLL
+// AJAX INFINITE SCROLL + FILTRES (slugs + ordre lisible)
 // ================================
-function nm_load_more_photos()
-{
-    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-    $ppp  = isset($_GET['ppp']) ? intval($_GET['ppp']) : 2;
-
-    $exclude_ids = [];
-    if (!empty($_GET['exclude'])) {
-        $exclude_ids = array_map('intval', explode(',', $_GET['exclude']));
-    }
-
-    $query = new WP_Query([
-        'post_type'      => 'photo',
-        'posts_per_page' => $ppp,
-        'paged'          => $page,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-        'post__not_in'   => $exclude_ids,
-    ]);
-
-
-    if ($query->have_posts()):
-        while ($query->have_posts()): $query->the_post();
-            $photo = get_post();
-            include locate_template('template-parts/photo-block.php');
-        endwhile;
-        wp_reset_postdata();
-    endif;
-
-    wp_die();
-}
 add_action('wp_ajax_load_more_photos', 'nm_load_more_photos');
 add_action('wp_ajax_nopriv_load_more_photos', 'nm_load_more_photos');
+
+function nm_load_more_photos()
+{
+    // On ne lit plus "page" du tout. Offset envoyé directement par JS.
+    $ppp    = isset($_GET['ppp'])    ? max(1, (int) $_GET['ppp'])    : 2;
+    $offset = isset($_GET['offset']) ? max(0, (int) $_GET['offset']) : 0;
+
+    // Filtres taxo (par slug) - AND si 2
+    $tax_query = [];
+    if (!empty($_GET['categorie'])) {
+        $tax_query[] = [
+            'taxonomy' => 'categorie',
+            'field'    => 'slug',
+            'terms'    => sanitize_title((string) $_GET['categorie']),
+        ];
+    }
+    if (!empty($_GET['format'])) {
+        $tax_query[] = [
+            'taxonomy' => 'format',
+            'field'    => 'slug',
+            'terms'    => sanitize_title((string) $_GET['format']),
+        ];
+    }
+    if (count($tax_query) > 1) {
+        $tax_query['relation'] = 'AND';
+    }
+
+    // Ordre lisible
+    $ordre = isset($_GET['ordre']) ? sanitize_text_field((string) $_GET['ordre']) : 'recentes';
+    $order = ($ordre === 'anciennes') ? 'ASC' : 'DESC';
+
+    // Query offset-based
+    $args = [
+        'post_type'           => 'photo',
+        'posts_per_page'      => $ppp,
+        'offset'              => $offset,
+        'orderby'             => 'date',
+        'order'               => $order,
+        'ignore_sticky_posts' => true,
+        'no_found_rows'       => true, // perf
+    ];
+    if (!empty($tax_query)) {
+        $args['tax_query'] = $tax_query;
+    }
+
+    $q = new WP_Query($args);
+
+    $output = '';
+    if ($q->have_posts()) {
+        while ($q->have_posts()) {
+            $q->the_post();
+            $photo = get_post(); // si ton template l'utilise
+            ob_start();
+            include locate_template('template-parts/photo-block.php');
+            $output .= ob_get_clean();
+        }
+        wp_reset_postdata();
+    }
+
+    echo $output; // peut être vide = plus rien à charger
+    wp_die();
+}
+
+// =============================================
+// Règles de réécriture pour les URLs propres
+// =============================================
+function nm_custom_rewrite_rules()
+{
+    // URL avec catégorie seule
+    add_rewrite_rule(
+        '^categorie/([^/]+)/?$',
+        'index.php?post_type=photo&categorie=$matches[1]',
+        'top'
+    );
+
+    // URL avec format seul
+    add_rewrite_rule(
+        '^format/([^/]+)/?$',
+        'index.php?post_type=photo&format=$matches[1]',
+        'top'
+    );
+
+    // URL avec catégorie + format
+    add_rewrite_rule(
+        '^categorie/([^/]+)/format/([^/]+)/?$',
+        'index.php?post_type=photo&categorie=$matches[1]&format=$matches[2]',
+        'top'
+    );
+
+    // URL avec catégorie + ordre
+    add_rewrite_rule(
+        '^categorie/([^/]+)/ordre/([^/]+)/?$',
+        'index.php?post_type=photo&categorie=$matches[1]&ordre=$matches[2]',
+        'top'
+    );
+
+    // URL avec format + ordre
+    add_rewrite_rule(
+        '^format/([^/]+)/ordre/([^/]+)/?$',
+        'index.php?post_type=photo&format=$matches[1]&ordre=$matches[2]',
+        'top'
+    );
+
+    // URL avec catégorie + format + ordre
+    add_rewrite_rule(
+        '^categorie/([^/]+)/format/([^/]+)/ordre/([^/]+)/?$',
+        'index.php?post_type=photo&categorie=$matches[1]&format=$matches[2]&ordre=$matches[3]',
+        'top'
+    );
+}
+add_action('init', 'nm_custom_rewrite_rules');

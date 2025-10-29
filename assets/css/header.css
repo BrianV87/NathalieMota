@@ -1,9 +1,13 @@
+/* =========================
+   HEADER GLOBAL
+========================= */
+
 .site-header {
     position: sticky;
     top: 0;
     z-index: 100;
     background: #fff;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, .06)
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
 }
 
 .header-inner {
@@ -14,24 +18,34 @@
     max-width: var(--container);
     margin: 0 auto;
     padding: 0 24px;
-    width: 100%
+    width: 100%;
 }
+
+
+/* =========================
+   LOGO
+========================= */
 
 .brand img {
     display: block;
     width: auto;
-    height: 16px
+    height: 16px;
 }
 
+
+/* =========================
+   NAVIGATION DESKTOP
+========================= */
+
 .site-nav {
-    display: block
+    display: block;
 }
 
 .menu {
     display: flex;
     align-items: center;
     gap: 60px;
-    list-style: none
+    list-style: none;
 }
 
 .menu a {
@@ -41,12 +55,17 @@
     letter-spacing: .1em;
     text-decoration: none;
     color: var(--black);
-    transition: color .3s
+    transition: color .3s;
 }
 
 .menu a:hover {
-    color: var(--red)
+    font-weight: bold;
 }
+
+
+/* =========================
+   BURGER MENU (MOBILE)
+========================= */
 
 .burger {
     display: none;
@@ -55,7 +74,7 @@
     border: 0;
     background: 0;
     cursor: pointer;
-    position: relative
+    position: relative;
 }
 
 .burger span {
@@ -64,41 +83,48 @@
     right: 9px;
     height: 2px;
     background: #000;
-    transition: transform .25s, opacity .2s
+    transition: transform .25s, opacity .2s;
 }
 
+/* Bars */
 .burger span:nth-child(1) {
-    top: 14px
+    top: 14px;
 }
 
 .burger span:nth-child(2) {
-    top: 21px
+    top: 21px;
 }
 
 .burger span:nth-child(3) {
-    bottom: 14px
+    bottom: 14px;
 }
 
+/* Animation état actif (croix) */
 .burger.is-active span:nth-child(1) {
     transform: rotate(45deg);
-    top: 21px
+    top: 21px;
 }
 
 .burger.is-active span:nth-child(2) {
-    opacity: 0
+    opacity: 0;
 }
 
 .burger.is-active span:nth-child(3) {
     transform: rotate(-45deg);
-    bottom: 21px
+    bottom: 21px;
 }
+
+
+/* =========================
+   RESPONSIVE — TABLETTE / MOBILE
+========================= */
 
 @media (max-width:1024px) {
     .site-nav {
-        display: none
+        display: none;
     }
 
     .burger {
-        display: block
+        display: block;
     }
 }

@@ -1,4 +1,7 @@
-/* DESKTOP (par défaut) */
+/* =========================
+   HERO SECTION — DESKTOP PAR DÉFAUT
+========================= */
+
 .home-hero {
     position: relative;
     width: 100%;
@@ -10,6 +13,10 @@
     align-items: center;
     justify-content: center;
 }
+
+/* =========================
+   BOUTON "LOAD MORE"
+========================= */
 
 .btn-load-more {
     width: 20%;
@@ -26,54 +33,25 @@
 }
 
 .btn-load-more:hover {
-    background-color: black!important;
-    color: white!important;
-    border: none!important;
+    background-color: black !important;
+    color: white !important;
+    border: none !important;
 }
 
-/* TABLETTE <= 1024px */
-@media (max-width:1024px){
-    .btn-load-more {
-        width: 50%;
-    }
-}
 
-/* MOBILE <= 640px */
-@media (max-width:640px){
-    .btn-load-more {
-        width: 50%;
-    }
-}
+/* =========================
+   RESPONSIVE — TABLETTE (≤1024)
+========================= */
 
-/* TABLETTE (≤1024px) */
 @media (max-width:1024px) {
+    .btn-load-more {
+        width: 50%;
+    }
+
     .home-hero {
         height: 65vh;
     }
-}
 
-/* MOBILE (≤640px) */
-@media (max-width:640px) {
-    .home-hero {
-        height: 50vh;
-    }
-}
-
-
-.home-hero__inner h1 {
-    font-family: "Space Mono", monospace;
-    font-style: italic;
-    text-transform: uppercase;
-    font-size: 6vw;
-    /* desktop default */
-    font-weight: 700;
-    color: transparent;
-    -webkit-text-stroke: 3px #fff;
-    letter-spacing: .05em;
-}
-
-/* TABLETTE (≤ 1024px) */
-@media (max-width:1024px) {
     .home-hero__inner h1 {
         font-size: 6vw;
         -webkit-text-stroke: 2px #fff;
@@ -81,11 +59,40 @@
     }
 }
 
-/* MOBILE (≤ 640px) */
+
+/* =========================
+   RESPONSIVE — MOBILE (≤640)
+========================= */
+
 @media (max-width:640px) {
+    .btn-load-more {
+        width: 50%;
+    }
+
+    .home-hero {
+        height: 50vh;
+    }
+
     .home-hero__inner h1 {
         font-size: 7vw;
         -webkit-text-stroke: 1px #fff;
         text-align: center;
     }
+}
+
+
+/* =========================
+   TITRE DANS LE HERO
+========================= */
+
+.home-hero__inner h1 {
+    font-family: "Space Mono", monospace;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: 6vw;
+    /* desktop */
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 3px #fff;
+    letter-spacing: .05em;
 }

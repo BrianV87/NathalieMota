@@ -8,8 +8,9 @@ get_header();
 ?>
 
 <main class="home">
-    <!-- HERO (optionnel) -->
+
     <?php
+    // HERO aléatoire (optionnel)
     $hero_url = '';
     $random_photo = get_posts([
         'post_type'      => 'photo',
@@ -21,6 +22,7 @@ get_header();
         $hero_url = get_the_post_thumbnail_url($random_photo[0], 'full');
     }
     ?>
+
     <?php if ($hero_url): ?>
         <section class="home-hero" style="background-image:url(<?= esc_url($hero_url) ?>);">
             <div class="home-hero__inner">
@@ -29,11 +31,13 @@ get_header();
         </section>
     <?php endif; ?>
 
-    <!-- CONTENU -->
+
     <section class="home-content container">
+
         <!-- Barre de filtres -->
         <div class="filters-bar">
             <div class="filters-left">
+
                 <!-- Catégories -->
                 <div class="dropdown" data-filter="categorie">
                     <button class="dropdown__toggle">
@@ -45,12 +49,13 @@ get_header();
                         <?php
                         $cats = get_terms(['taxonomy' => 'categorie', 'hide_empty' => true]);
                         foreach ($cats as $cat): ?>
-                            <button class="dropdown__item" data-value="<?php echo esc_attr($cat->slug); ?>">
-                                <?php echo esc_html($cat->name); ?>
+                            <button class="dropdown__item" data-value="<?= esc_attr($cat->slug); ?>">
+                                <?= esc_html($cat->name); ?>
                             </button>
                         <?php endforeach; ?>
                     </div>
                 </div>
+
                 <!-- Formats -->
                 <div class="dropdown" data-filter="format">
                     <button class="dropdown__toggle">
@@ -62,15 +67,17 @@ get_header();
                         <?php
                         $fmts = get_terms(['taxonomy' => 'format', 'hide_empty' => true]);
                         foreach ($fmts as $fmt): ?>
-                            <button class="dropdown__item" data-value="<?php echo esc_attr($fmt->slug); ?>">
-                                <?php echo esc_html($fmt->name); ?>
+                            <button class="dropdown__item" data-value="<?= esc_attr($fmt->slug); ?>">
+                                <?= esc_html($fmt->name); ?>
                             </button>
                         <?php endforeach; ?>
                     </div>
                 </div>
+
             </div>
+
             <div class="filters-right">
-                <!-- Trier par -->
+                <!-- Tri par ordre -->
                 <div class="dropdown" data-filter="ordre">
                     <button class="dropdown__toggle">
                         <span class="dropdown__label">Trier par</span>
@@ -84,19 +91,18 @@ get_header();
             </div>
         </div>
 
+
         <!-- Liste des photos -->
         <div class="related-photos__list js-photo-list">
             <?php
-            // Lire les filtres depuis l'URL propre (ex: /categorie/mariage/format/paysage/)
+            // Lire les filtres depuis l'URL propre
             $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
             $pathParts = explode('/', $path);
 
-            // Extraire les valeurs des filtres
             $categorie = in_array('categorie', $pathParts) ? $pathParts[array_search('categorie', $pathParts) + 1] : '';
-            $format = in_array('format', $pathParts) ? $pathParts[array_search('format', $pathParts) + 1] : '';
-            $ordre = in_array('ordre', $pathParts) ? $pathParts[array_search('ordre', $pathParts) + 1] : 'recentes';
+            $format    = in_array('format', $pathParts)    ? $pathParts[array_search('format', $pathParts) + 1]    : '';
+            $ordre     = in_array('ordre', $pathParts)     ? $pathParts[array_search('ordre', $pathParts) + 1]     : 'recentes';
 
-            // Construire tax_query
             $tax_query = [];
             if ($categorie) {
                 $tax_query[] = [
@@ -116,7 +122,6 @@ get_header();
                 $tax_query['relation'] = 'AND';
             }
 
-            // Requête principale
             $args = [
                 'post_type'      => 'photo',
                 'posts_per_page' => 8,
@@ -130,22 +135,24 @@ get_header();
 
             $photos = new WP_Query($args);
 
-            if ($photos->have_posts()) :
-                while ($photos->have_posts()) : $photos->the_post();
+            if ($photos->have_posts()):
+                while ($photos->have_posts()): $photos->the_post();
                     $photo = get_post();
                     include locate_template('template-parts/photo-block.php');
                 endwhile;
                 wp_reset_postdata();
-            else :
+            else:
                 echo "<p class='no-results'>Aucune photo trouvée.</p>";
             endif;
             ?>
         </div>
 
-        <!-- BOUTON LOAD MORE -->
+
+        <!-- Bouton Load More -->
         <div class="load-more-wrapper">
             <button id="load-more" class="btn-load-more">Charger plus</button>
         </div>
+
     </section>
 </main>
 

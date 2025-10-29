@@ -1,5 +1,6 @@
 <footer class="site-footer">
     <hr class="footer-line">
+
     <div class="container footer-inner">
         <?php
         wp_nav_menu([
@@ -10,7 +11,9 @@
         ]);
         ?>
     </div>
+
     <?php get_template_part('template-parts/modal', 'contact'); ?>
+    <?php get_template_part('template-parts/lightbox'); ?>
     <?php wp_footer(); ?>
 </footer>
 

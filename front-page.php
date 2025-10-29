@@ -5,22 +5,22 @@
  */
 get_header();
 
-/** HERO source
- *  1) Si ACF est présent et qu'une image "hero_image" est remplie sur la page d'accueil → on l'utilise
- *  2) Sinon → on prend une photo ALÉATOIRE du CPT "photo"
+/**
+ * HERO — source de l'image :
+ * 1) si ACF hero_image réglé sur la page d'accueil → prendre celle-ci
+ * 2) sinon → fallback = photo aléatoire du CPT photo
  */
 $hero_url = '';
 
-$front_id = get_option('page_on_front'); // id de la page d'accueil
+$front_id = get_option('page_on_front');
 if (function_exists('get_field') && $front_id) {
-    $hero_id = get_field('hero_image', $front_id); // champ ACF: Image (retour = ID)
+    $hero_id = get_field('hero_image', $front_id);
     if ($hero_id) {
         $hero_url = wp_get_attachment_image_url($hero_id, 'full');
     }
 }
 
 if (!$hero_url) {
-    // Fallback aléatoire
     $random_photo = get_posts([
         'post_type'      => 'photo',
         'posts_per_page' => 1,
@@ -42,12 +42,14 @@ if (!$hero_url) {
         </div>
     </section>
 
-    <!-- CONTENU -->
+
     <section class="home-content container">
 
+        <!-- Barre de filtres (sur taxes + ordre) -->
         <div class="filters-bar">
             <div class="filters-left">
-                <!-- Catégories (slug) -->
+
+                <!-- Catégories -->
                 <div class="dropdown" data-filter="categorie">
                     <button class="dropdown__toggle">
                         <span class="dropdown__label">Catégories</span>
@@ -58,14 +60,14 @@ if (!$hero_url) {
                         <?php
                         $cats = get_terms(['taxonomy' => 'categorie', 'hide_empty' => true]);
                         foreach ($cats as $cat): ?>
-                            <button class="dropdown__item" data-value="<?php echo esc_attr($cat->slug); ?>">
-                                <?php echo esc_html($cat->name); ?>
+                            <button class="dropdown__item" data-value="<?= esc_attr($cat->slug) ?>">
+                                <?= esc_html($cat->name) ?>
                             </button>
                         <?php endforeach; ?>
                     </div>
                 </div>
 
-                <!-- Formats (slug) -->
+                <!-- Formats -->
                 <div class="dropdown" data-filter="format">
                     <button class="dropdown__toggle">
                         <span class="dropdown__label">Formats</span>
@@ -76,16 +78,17 @@ if (!$hero_url) {
                         <?php
                         $fmts = get_terms(['taxonomy' => 'format', 'hide_empty' => true]);
                         foreach ($fmts as $fmt): ?>
-                            <button class="dropdown__item" data-value="<?php echo esc_attr($fmt->slug); ?>">
-                                <?php echo esc_html($fmt->name); ?>
+                            <button class="dropdown__item" data-value="<?= esc_attr($fmt->slug) ?>">
+                                <?= esc_html($fmt->name) ?>
                             </button>
                         <?php endforeach; ?>
                     </div>
                 </div>
+
             </div>
 
             <div class="filters-right">
-                <!-- Trier par -->
+                <!-- Tri par date -->
                 <div class="dropdown" data-filter="ordre">
                     <button class="dropdown__toggle">
                         <span class="dropdown__label">Trier par</span>
@@ -100,15 +103,15 @@ if (!$hero_url) {
         </div>
 
 
+        <!-- Liste des photos initiale (avant AJAX / Load More) -->
         <div class="related-photos__list js-photo-list">
             <?php
-
-            // Lire les filtres depuis l'URL
+            // Filtres GET (front-page utilise querystring avant réécriture)
             $categorie = isset($_GET['categorie']) ? sanitize_title($_GET['categorie']) : '';
             $format    = isset($_GET['format'])    ? sanitize_title($_GET['format'])    : '';
             $ordre     = (isset($_GET['ordre']) && $_GET['ordre'] === 'anciennes') ? 'ASC' : 'DESC';
 
-            // Construire tax_query
+            // Filtrage taxonomies
             $tax_query = [];
             if ($categorie) {
                 $tax_query[] = [
@@ -128,6 +131,7 @@ if (!$hero_url) {
                 $tax_query['relation'] = 'AND';
             }
 
+            // Query WP (premier batch)
             $args = [
                 'post_type'      => 'photo',
                 'posts_per_page' => 8,
@@ -135,33 +139,30 @@ if (!$hero_url) {
                 'order'          => $ordre,
                 'paged'          => 1,
             ];
-
-            if (!empty($tax_query)) {
+            if ($tax_query) {
                 $args['tax_query'] = $tax_query;
             }
 
             $photos = new WP_Query($args);
 
-            if ($photos->have_posts()) :
-                while ($photos->have_posts()) : $photos->the_post();
+            if ($photos->have_posts()):
+                while ($photos->have_posts()): $photos->the_post();
                     $photo = get_post();
                     include locate_template('template-parts/photo-block.php');
                 endwhile;
                 wp_reset_postdata();
-            else :
+            else:
                 echo "<p class='no-results'>Aucune photo trouvée.</p>";
             endif;
             ?>
         </div>
 
-
-        <!-- BOUTON LOAD MORE -->
+        <!-- Load more -->
         <div class="load-more-wrapper">
             <button id="load-more" class="btn-load-more">Charger plus</button>
         </div>
 
     </section>
-
 </main>
 
 <?php get_footer(); ?>

@@ -1,20 +1,23 @@
 <?php
-if (!defined('ABSPATH')) exit; // Sécurité
+// ========================================
+// Sécurité — empêche l'accès direct
+// ========================================
+if ( ! defined('ABSPATH') ) exit;
 
-// ===============================
-// Configuration du thème
-// ===============================
-function nathalie_mota_setup()
-{
+// ========================================
+// Configuration du thème (supports + menus)
+// ========================================
+function nathalie_mota_setup() {
+
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
+
     add_theme_support('custom-logo', [
         'height'      => 48,
         'width'       => 200,
         'flex-height' => true,
         'flex-width'  => true,
     ]);
-
 
     register_nav_menus([
         'main'   => __('Menu principal', 'nathalie-mota'),
@@ -23,12 +26,12 @@ function nathalie_mota_setup()
 }
 add_action('after_setup_theme', 'nathalie_mota_setup');
 
-// ===============================
-// Chargement des styles et scripts
-// ===============================
-function nathalie_mota_assets()
-{
-    // Polices Google
+// ========================================
+// Chargement des assets (CSS / JS)
+// ========================================
+function nathalie_mota_assets() {
+
+    // ---------- Polices ----------
     wp_enqueue_style(
         'nm-fonts',
         'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap',
@@ -36,7 +39,7 @@ function nathalie_mota_assets()
         null
     );
 
-    // Feuille de style principale
+    // ---------- CSS ----------
     wp_enqueue_style(
         'nm-main',
         get_template_directory_uri() . '/assets/css/main.css',
@@ -44,8 +47,7 @@ function nathalie_mota_assets()
         filemtime(get_template_directory() . '/assets/css/main.css')
     );
 
-
-    // JS modal
+    // ---------- JS : modale contact ----------
     wp_enqueue_script(
         'nm-modal',
         get_template_directory_uri() . '/assets/js/modal.js',
@@ -54,7 +56,16 @@ function nathalie_mota_assets()
         true
     );
 
-    // JS burger
+    // ---------- JS : lightbox ----------
+    wp_enqueue_script(
+        'nm-lightbox',
+        get_template_directory_uri() . '/assets/js/lightbox.js',
+        [],
+        filemtime(get_template_directory() . '/assets/js/lightbox.js'),
+        true
+    );
+
+    // ---------- JS : burger menu ----------
     wp_enqueue_script(
         'nm-burger',
         get_template_directory_uri() . '/assets/js/burger.js',
@@ -63,42 +74,49 @@ function nathalie_mota_assets()
         true
     );
 
-    // JS infinite scroll (chargé aussi sur la home)
+    // ---------- JS : infinite scroll ----------
     wp_enqueue_script(
         'nm-infinite',
         get_template_directory_uri() . '/assets/js/infinite-scroll.js',
-        ['jquery'], // <--- IMPORTANT
+        ['jquery'],
         filemtime(get_template_directory() . '/assets/js/infinite-scroll.js'),
         true
     );
 
+    // ---------- JS : second thumb ----------
+    wp_enqueue_script(
+        'nm-second-thumb',
+        get_template_directory_uri() . '/assets/js/second-thumb.js',
+        ['jquery'],
+        filemtime(get_template_directory() . '/assets/js/second-thumb.js'),
+        true
+    );
 
+    // Passage de l'URL AJAX au JS
     wp_localize_script('nm-infinite', 'nm_ajax', [
         'ajax_url' => admin_url('admin-ajax.php'),
     ]);
 }
 add_action('wp_enqueue_scripts', 'nathalie_mota_assets');
 
-// ================================
-// 1️⃣ — Enregistrement du CPT "photo"
-// ================================
-function nm_register_post_type_photo()
-{
+// ========================================
+// CPT : Photo
+// ========================================
+function nm_register_post_type_photo() {
 
     $labels = [
-        'name'                  => 'Photos',
-        'singular_name'         => 'Photo',
-        'menu_name'             => 'Photos',
-        'name_admin_bar'        => 'Photo',
-        'add_new'               => 'Ajouter',
-        'add_new_item'          => 'Ajouter une photo',
-        'edit_item'             => 'Modifier la photo',
-        'new_item'              => 'Nouvelle photo',
-        'view_item'             => 'Voir la photo',
-        'all_items'             => 'Toutes les photos',
-        'search_items'          => 'Rechercher des photos',
-        'not_found'             => 'Aucune photo trouvée',
-        'not_found_in_trash'    => 'Aucune photo dans la corbeille',
+        'name'               => 'Photos',
+        'singular_name'      => 'Photo',
+        'menu_name'          => 'Photos',
+        'add_new'            => 'Ajouter',
+        'add_new_item'       => 'Ajouter une photo',
+        'edit_item'          => 'Modifier la photo',
+        'new_item'           => 'Nouvelle photo',
+        'view_item'          => 'Voir la photo',
+        'all_items'          => 'Toutes les photos',
+        'search_items'       => 'Rechercher des photos',
+        'not_found'          => 'Aucune photo trouvée',
+        'not_found_in_trash' => 'Aucune photo dans la corbeille',
     ];
 
     $args = [
@@ -110,11 +128,6 @@ function nm_register_post_type_photo()
         'has_archive'        => true,
         'rewrite'            => ['slug' => 'photos', 'with_front' => true],
         'show_in_rest'       => true,
-        'show_in_menu'       => true,
-        'publicly_queryable' => true,
-        'hierarchical'       => false,
-        'capability_type'    => 'post',
-        'map_meta_cap'       => true,
     ];
 
     register_post_type('photo', $args);
@@ -122,83 +135,36 @@ function nm_register_post_type_photo()
 add_action('init', 'nm_register_post_type_photo', 0);
 
 
-// ================================
-// 2️⃣ — Taxonomies : Catégories & Formats (version 2025)
-// ================================
-function nm_register_photo_taxonomies()
-{
+// ========================================
+// Taxonomies : Catégorie & Format
+// ========================================
+function nm_register_photo_taxonomies() {
 
-    /**
-     * === Taxonomy : Catégories ===
-     * (hiérarchique, comme les catégories classiques)
-     */
+    // ---------- Catégories (hiérarchiques) ----------
     register_taxonomy('categorie', ['photo'], [
-        'labels' => [
-            'name'                       => 'Catégories',
-            'singular_name'              => 'Catégorie',
-            'menu_name'                  => 'Catégories',
-            'all_items'                  => 'Toutes les catégories',
-            'edit_item'                  => 'Modifier la catégorie',
-            'view_item'                  => 'Voir la catégorie',
-            'update_item'                => 'Mettre à jour la catégorie',
-            'add_new_item'               => 'Ajouter une nouvelle catégorie',
-            'new_item_name'              => 'Nom de la nouvelle catégorie',
-            'parent_item'                => 'Catégorie parente',
-            'parent_item_colon'          => 'Catégorie parente :',
-            'search_items'               => 'Rechercher des catégories',
-            'not_found'                  => 'Aucune catégorie trouvée',
-        ],
-        'hierarchical'          => true,
-        'public'                => true,
-        'show_ui'               => true,
-        'show_admin_column'     => true,
-        'show_in_nav_menus'     => true,
-        'show_tagcloud'         => false,
-        'show_in_quick_edit'    => true,
-        'show_in_rest'          => true,                 // ✅ pour Gutenberg
-        'rest_base'             => 'categories-photo',   // ✅ nécessaire pour l’UI dans l’éditeur bloc
-        'rewrite'               => ['slug' => 'categorie', 'with_front' => true],
+        'labels'       => ['name' => 'Catégories', 'singular_name' => 'Catégorie'],
+        'hierarchical' => true,
+        'public'       => true,
+        'show_in_rest' => true,
+        'rewrite'      => ['slug' => 'categorie'],
     ]);
 
-    /**
-     * === Taxonomy : Formats ===
-     * (non hiérarchique, comme les étiquettes)
-     */
+    // ---------- Formats (hiérarchiques aussi ici) ----------
     register_taxonomy('format', ['photo'], [
-        'labels' => [
-            'name'                       => 'Formats',
-            'singular_name'              => 'Format',
-            'menu_name'                  => 'Formats',
-            'all_items'                  => 'Tous les formats',
-            'edit_item'                  => 'Modifier le format',
-            'view_item'                  => 'Voir le format',
-            'update_item'                => 'Mettre à jour le format',
-            'add_new_item'               => 'Ajouter un nouveau format',
-            'new_item_name'              => 'Nom du nouveau format',
-            'search_items'               => 'Rechercher des formats',
-            'not_found'                  => 'Aucun format trouvé',
-        ],
-        'hierarchical'          => true,
-        'public'                => true,
-        'show_ui'               => true,
-        'show_admin_column'     => true,
-        'show_in_nav_menus'     => true,
-        'show_tagcloud'         => true,
-        'show_in_quick_edit'    => true,
-        'show_in_rest'          => true,                // ✅ pour Gutenberg
-        'rest_base'             => 'formats-photo',     // ✅ pour affichage correct dans Gutenberg
-        'rewrite'               => ['slug' => 'format', 'with_front' => true],
+        'labels'       => ['name' => 'Formats', 'singular_name' => 'Format'],
+        'hierarchical' => true,
+        'public'       => true,
+        'show_in_rest' => true,
+        'rewrite'      => ['slug' => 'format'],
     ]);
 }
 add_action('init', 'nm_register_photo_taxonomies', 1);
 
 
-
-// ================================
-// 3️⃣ — Flush des permaliens à l’activation du thème
-// ================================
-function nm_flush_rewrite_on_switch()
-{
+// ========================================
+// Flush des permaliens à l'activation thème
+// ========================================
+function nm_flush_rewrite_on_switch() {
     nm_register_post_type_photo();
     nm_register_photo_taxonomies();
     flush_rewrite_rules();
@@ -206,11 +172,10 @@ function nm_flush_rewrite_on_switch()
 add_action('after_switch_theme', 'nm_flush_rewrite_on_switch');
 
 
-// ================================
-// 4️⃣ — Métabox "Informations de la photo"
-// ================================
-function nm_add_photo_metaboxes()
-{
+// ========================================
+// Metabox "Informations de la photo"
+// ========================================
+function nm_add_photo_metaboxes() {
     add_meta_box(
         'photo_infos',
         'Informations de la photo',
@@ -222,16 +187,13 @@ function nm_add_photo_metaboxes()
 }
 add_action('add_meta_boxes', 'nm_add_photo_metaboxes');
 
-function nm_render_photo_metabox($post)
-{
-    // Sécurité
-    wp_nonce_field('nm_save_photo_meta', 'nm_photo_meta_nonce');
 
-    // Valeurs existantes
+function nm_render_photo_metabox($post) {
+    wp_nonce_field('nm_save_photo_meta', 'nm_photo_meta_nonce');
     $reference = get_post_meta($post->ID, '_reference', true);
     $annee     = get_post_meta($post->ID, '_annee', true);
     $type      = get_post_meta($post->ID, '_type', true);
-?>
+    ?>
     <div style="display:grid;gap:12px;max-width:420px;">
         <label><strong>Référence :</strong><br>
             <input type="text" name="photo_reference" value="<?php echo esc_attr($reference); ?>" style="width:100%">
@@ -249,22 +211,19 @@ function nm_render_photo_metabox($post)
             </select>
         </label>
     </div>
-<?php
+    <?php
 }
 
 
-// ================================
-// 5️⃣ — Sauvegarde sécurisée des métadonnées
-// ================================
-function nm_save_photo_fields($post_id)
-{
+// ========================================
+// Sauvegarde sécurisée des métadonnées
+// ========================================
+function nm_save_photo_fields($post_id) {
 
-    // Vérifications de sécurité
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
-    if (!isset($_POST['nm_photo_meta_nonce']) || !wp_verify_nonce($_POST['nm_photo_meta_nonce'], 'nm_save_photo_meta')) return;
+    if (!isset($_POST['nm_photo_meta_nonce']) || !wp_verify_nonce($_POST['nm_photo_meta_nonce'],'nm_save_photo_meta')) return;
     if (!current_user_can('edit_post', $post_id)) return;
 
-    // Sauvegarde sécurisée
     $fields = [
         '_reference' => isset($_POST['photo_reference']) ? sanitize_text_field($_POST['photo_reference']) : '',
         '_annee'     => isset($_POST['photo_annee']) ? absint($_POST['photo_annee']) : '',
@@ -272,64 +231,47 @@ function nm_save_photo_fields($post_id)
     ];
 
     foreach ($fields as $key => $value) {
-        if (!empty($value)) {
-            update_post_meta($post_id, $key, $value);
-        } else {
-            delete_post_meta($post_id, $key);
-        }
+        if (!empty($value)) update_post_meta($post_id, $key, $value);
+        else delete_post_meta($post_id, $key);
     }
 }
 add_action('save_post_photo', 'nm_save_photo_fields');
 
-// ===============================
-// Optimisations images & Green Code
-// ===============================
+// ========================================
+// Optimisation des images
+// ========================================
 add_filter('big_image_size_threshold', function () {
-    return 2560; // Limite la taille des images originales
+    return 2560;
 });
 
-// Tailles optimisées pour les photos
 add_image_size('photo_large', 1600, 0, false);
 add_image_size('photo_medium', 1024, 0, false);
 add_image_size('photo_small', 600, 0, false);
 
-// ================================
-// AJAX INFINITE SCROLL + FILTRES (slugs + ordre lisible)
-// ================================
+
+// ========================================
+// AJAX : Load more photos
+// ========================================
 add_action('wp_ajax_load_more_photos', 'nm_load_more_photos');
 add_action('wp_ajax_nopriv_load_more_photos', 'nm_load_more_photos');
 
-function nm_load_more_photos()
-{
-    // On ne lit plus "page" du tout. Offset envoyé directement par JS.
-    $ppp    = isset($_GET['ppp'])    ? max(1, (int) $_GET['ppp'])    : 2;
-    $offset = isset($_GET['offset']) ? max(0, (int) $_GET['offset']) : 0;
+function nm_load_more_photos() {
 
-    // Filtres taxo (par slug) - AND si 2
+    $ppp    = isset($_GET['ppp'])    ? max(1,(int)$_GET['ppp'])    : 2;
+    $offset = isset($_GET['offset']) ? max(0,(int)$_GET['offset']) : 0;
+
     $tax_query = [];
     if (!empty($_GET['categorie'])) {
-        $tax_query[] = [
-            'taxonomy' => 'categorie',
-            'field'    => 'slug',
-            'terms'    => sanitize_title((string) $_GET['categorie']),
-        ];
+        $tax_query[] = ['taxonomy'=>'categorie','field'=>'slug','terms'=>sanitize_title($_GET['categorie'])];
     }
     if (!empty($_GET['format'])) {
-        $tax_query[] = [
-            'taxonomy' => 'format',
-            'field'    => 'slug',
-            'terms'    => sanitize_title((string) $_GET['format']),
-        ];
+        $tax_query[] = ['taxonomy'=>'format','field'=>'slug','terms'=>sanitize_title($_GET['format'])];
     }
-    if (count($tax_query) > 1) {
-        $tax_query['relation'] = 'AND';
-    }
+    if (count($tax_query)>1) $tax_query['relation']='AND';
 
-    // Ordre lisible
-    $ordre = isset($_GET['ordre']) ? sanitize_text_field((string) $_GET['ordre']) : 'recentes';
+    $ordre = isset($_GET['ordre']) ? sanitize_text_field($_GET['ordre']) : 'recentes';
     $order = ($ordre === 'anciennes') ? 'ASC' : 'DESC';
 
-    // Query offset-based
     $args = [
         'post_type'           => 'photo',
         'posts_per_page'      => $ppp,
@@ -337,75 +279,40 @@ function nm_load_more_photos()
         'orderby'             => 'date',
         'order'               => $order,
         'ignore_sticky_posts' => true,
-        'no_found_rows'       => true, // perf
+        'no_found_rows'       => true,
     ];
-    if (!empty($tax_query)) {
-        $args['tax_query'] = $tax_query;
-    }
+    if ($tax_query) $args['tax_query']=$tax_query;
 
     $q = new WP_Query($args);
 
-    $output = '';
+    $output='';
     if ($q->have_posts()) {
         while ($q->have_posts()) {
             $q->the_post();
-            $photo = get_post(); // si ton template l'utilise
+            $photo=get_post();
             ob_start();
             include locate_template('template-parts/photo-block.php');
-            $output .= ob_get_clean();
+            $output.=ob_get_clean();
         }
         wp_reset_postdata();
     }
 
-    echo $output; // peut être vide = plus rien à charger
+    echo $output;
     wp_die();
 }
 
-// =============================================
-// Règles de réécriture pour les URLs propres
-// =============================================
-function nm_custom_rewrite_rules()
-{
-    // URL avec catégorie seule
-    add_rewrite_rule(
-        '^categorie/([^/]+)/?$',
-        'index.php?post_type=photo&categorie=$matches[1]',
-        'top'
-    );
 
-    // URL avec format seul
-    add_rewrite_rule(
-        '^format/([^/]+)/?$',
-        'index.php?post_type=photo&format=$matches[1]',
-        'top'
-    );
+// ========================================
+// Réécriture des URL propres (filters front)
+// ========================================
+add_action('init','nm_custom_rewrite_rules');
 
-    // URL avec catégorie + format
-    add_rewrite_rule(
-        '^categorie/([^/]+)/format/([^/]+)/?$',
-        'index.php?post_type=photo&categorie=$matches[1]&format=$matches[2]',
-        'top'
-    );
+function nm_custom_rewrite_rules() {
 
-    // URL avec catégorie + ordre
-    add_rewrite_rule(
-        '^categorie/([^/]+)/ordre/([^/]+)/?$',
-        'index.php?post_type=photo&categorie=$matches[1]&ordre=$matches[2]',
-        'top'
-    );
-
-    // URL avec format + ordre
-    add_rewrite_rule(
-        '^format/([^/]+)/ordre/([^/]+)/?$',
-        'index.php?post_type=photo&format=$matches[1]&ordre=$matches[2]',
-        'top'
-    );
-
-    // URL avec catégorie + format + ordre
-    add_rewrite_rule(
-        '^categorie/([^/]+)/format/([^/]+)/ordre/([^/]+)/?$',
-        'index.php?post_type=photo&categorie=$matches[1]&format=$matches[2]&ordre=$matches[3]',
-        'top'
-    );
+    add_rewrite_rule('^categorie/([^/]+)/?$','index.php?post_type=photo&categorie=$matches[1]','top');
+    add_rewrite_rule('^format/([^/]+)/?$','index.php?post_type=photo&format=$matches[1]','top');
+    add_rewrite_rule('^categorie/([^/]+)/format/([^/]+)/?$','index.php?post_type=photo&categorie=$matches[1]&format=$matches[2]','top');
+    add_rewrite_rule('^categorie/([^/]+)/ordre/([^/]+)/?$','index.php?post_type=photo&categorie=$matches[1]&ordre=$matches[2]','top');
+    add_rewrite_rule('^format/([^/]+)/ordre/([^/]+)/?$','index.php?post_type=photo&format=$matches[1]&ordre=$matches[2]','top');
+    add_rewrite_rule('^categorie/([^/]+)/format/([^/]+)/ordre/([^/]+)/?$','index.php?post_type=photo&categorie=$matches[1]&format=$matches[2]&ordre=$matches[3]','top');
 }
-add_action('init', 'nm_custom_rewrite_rules');

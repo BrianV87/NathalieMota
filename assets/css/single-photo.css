@@ -1,15 +1,18 @@
-/* =============================================
-   STRUCTURE GLOBALE
-   ============================================= */
+/* =========================================================
+   STRUCTURE GLOBALE — CONTENEUR PAGE SINGLE PHOTO
+========================================================= */
+
 .single-photo {
     max-width: var(--container);
     margin-inline: auto;
     width: 100%;
 }
 
-/* =============================================
+
+/* =========================================================
    TYPOGRAPHIE
-   ============================================= */
+========================================================= */
+
 .single-photo__row.first-row .single-photo__col-left h1,
 .single-photo__row.first-row .single-photo__col-left p,
 .single-photo__row.first-row .single-photo__col-left a {
@@ -29,14 +32,16 @@
     font-size: 18px;
     font-family: "Space Mono", monospace;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: .05em;
     margin-bottom: 3rem;
     font-weight: 400;
 }
 
-/* =============================================
-   DISPOSITION DES ÉLÉMENTS
-   ============================================= */
+
+/* =========================================================
+   LAYOUT DES BLOCS
+========================================================= */
+
 .single-photo__row {
     display: grid;
     grid-template-columns: 50% 50%;
@@ -49,7 +54,8 @@
 }
 
 .single-photo__row.second-row {
-    margin-top: 2vh;
+    margin-top: 0;
+    height: 118px;
 }
 
 .single-photo__row.first-row .single-photo__col-left {
@@ -63,9 +69,15 @@
     justify-content: flex-end;
 }
 
-/* =============================================
+.second-arrows a:first-child {
+    margin-right: 20px;
+}
+
+
+/* =========================================================
    IMAGES
-   ============================================= */
+========================================================= */
+
 .single-photo__col-right {
     height: 100%;
     overflow: hidden;
@@ -87,8 +99,8 @@
 }
 
 .second-thumb img {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
     display: block;
 }
@@ -99,9 +111,15 @@
     object-fit: cover;
 }
 
-/* =============================================
-   NAVIGATION
-   ============================================= */
+.second-thumb {
+    display: none;
+}
+
+
+/* =========================================================
+   NAVIGATION ENTRE PHOTOS
+========================================================= */
+
 .bottom-nav {
     display: flex;
     justify-content: flex-end;
@@ -116,11 +134,11 @@
 
 .arrows img {
     width: 24px;
-    transition: 0.2s;
+    transition: .2s;
 }
 
 .arrows img:hover {
-    opacity: 0.6;
+    opacity: .6;
     transform: translateY(-2px);
 }
 
@@ -139,9 +157,15 @@
     padding-right: 1rem;
 }
 
-/* =============================================
-   DIVIDER & RELATED PHOTOS
-   ============================================= */
+.second-left p {
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   DIVIDER + RELATED PHOTOS
+========================================================= */
+
 .single-photo__divider {
     border-top: 1px solid #111;
     margin: 1vh 0;
@@ -159,10 +183,13 @@
     margin-top: 3rem;
 }
 
-/* =============================================
-   RESPONSIVE : MOBILE & TABLETTE
-   ============================================= */
-@media (max-width: 768px) {
+
+/* =========================================================
+   RESPONSIVE — TABLETTE & MOBILE
+========================================================= */
+
+@media (max-width:768px) {
+
     .single-photo__row {
         grid-template-columns: 1fr;
         gap: 2rem;

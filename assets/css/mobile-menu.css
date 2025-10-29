@@ -1,3 +1,7 @@
+/* =========================================================
+   MOBILE MENU (PANEL SLIDE)
+========================================================= */
+
 .mobile-menu {
     position: fixed;
     inset: 0;
@@ -6,13 +10,20 @@
     flex-direction: column;
     justify-content: flex-start;
     transform: translateX(100%);
+    /* caché par défaut (hors écran à droite) */
     transition: transform .35s ease-in-out;
-    z-index: 9999
+    z-index: 9999;
 }
 
 .mobile-menu.is-open {
-    transform: translateX(0)
+    transform: translateX(0);
+    /* affiché */
 }
+
+
+/* =========================================================
+   HEADER DU PANEL (barre avec close)
+========================================================= */
 
 .mobile-menu-header {
     height: var(--header-h);
@@ -20,7 +31,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 24px
+    padding: 0 24px;
 }
 
 .mobile-menu-close {
@@ -28,14 +39,19 @@
     background: 0;
     font-size: 28px;
     color: #000;
-    cursor: pointer
+    cursor: pointer;
 }
+
+
+/* =========================================================
+   NAVIGATION INTERNE DU MENU
+========================================================= */
 
 .mobile-menu-nav {
     flex: 1;
     display: flex;
     justify-content: center;
-    align-items: center
+    align-items: center;
 }
 
 .menu-mobile {
@@ -45,7 +61,7 @@
     align-items: center;
     gap: 48px;
     margin: 0;
-    padding: 0
+    padding: 0;
 }
 
 .menu-mobile a {
@@ -56,25 +72,35 @@
     letter-spacing: .1em;
     font-size: 44px;
     font-weight: 400;
-    transition: opacity .25s
+    transition: opacity .25s;
 }
 
 .menu-mobile a:hover {
-    opacity: .7
+    opacity: .7;
 }
+
+
+/* =========================================================
+   COMPENSATION ADMIN BAR (si connecté WP)
+========================================================= */
 
 body.admin-bar .mobile-menu {
-    top: 32px
+    top: 32px;
 }
 
-@media(max-width:782px) {
+@media (max-width:782px) {
     body.admin-bar .mobile-menu {
-        top: 46px
+        top: 46px;
     }
 }
 
-@media(max-width:640px) {
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width:640px) {
     .menu-mobile a {
-        font-size: 36px
+        font-size: 36px;
     }
 }

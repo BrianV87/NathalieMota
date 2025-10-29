@@ -1,0 +1,349 @@
+/* ============= G R I D — galerie photo (2 colonnes comme avant) ============= */
+
+.photos-grid,
+.related-photos__list,
+.archive-photo,
+.gallery,
+.photo-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1vw;
+    margin-top: 3rem;
+}
+
+@media (max-width: 768px) {
+
+    .photos-grid,
+    .related-photos__list,
+    .archive-photo,
+    .gallery,
+    .photo-list {
+        grid-template-columns: 1fr;
+        gap: 3vh;
+    }
+}
+
+/* ============= C A R D / IMAGE ============= */
+
+.photo-card {
+    position: relative;
+    overflow: hidden;
+    background: #000;
+}
+
+.photo-card__media img {
+    width: 100%;
+    height: 50vh;
+    /* identique à ton ancien related-photos__list img */
+    object-fit: cover;
+    display: block;
+}
+
+/* ============= OVERLAY ============= */
+
+.photo-card__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, .65);
+    opacity: 0;
+    transition: opacity .3s ease;
+    pointer-events: none;
+}
+
+.photo-card:hover .photo-card__overlay,
+.photo-card:focus-within .photo-card__overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ============= BOUTONS ============= */
+
+.photo-card__btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: #fff;
+}
+
+.photo-card__btn--fullscreen {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.photo-card__btn--eye {
+    margin: auto 0;
+}
+
+/* ============= INFOS EN BAS ============= */
+
+.photo-card__meta {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+    font-size: .85rem;
+}
+
+/* === Hover : œil centré + fullscreen en haut-droite === */
+
+/* Overlay : centre tout correctement */
+.photo-card__overlay {
+    background: rgba(0, 0, 0, .8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Œil centré — SAFE FULL VISIBLE */
+.photo-card__btn--eye {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-card__btn--eye img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+
+/* Fullscreen : petit, en haut-droite */
+.photo-card__btn--fullscreen {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-card__btn--fullscreen img {
+    width: 40px;
+    height: 40px;
+    display: block;
+    object-fit: cover;
+}
+
+/* Légendes bas : un poil de marge pour respirer */
+.photo-card__meta {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    font-size: .9rem;
+}
+
+/* Responsive : un peu plus gros sur mobile */
+@media (max-width: 640px) {
+    .photo-card__btn--eye {
+        width: 52px;
+        height: 52px;
+    }
+
+    .photo-card__btn--eye img {
+        width: 42px;
+        height: 42px;
+    }
+
+    .photo-card__btn--fullscreen {
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+    }
+
+    .photo-card__btn--fullscreen img {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+
+/* LIGHTBOX RESET STABLE */
+#nm-lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .8);
+    display: none;
+    z-index: 99999;
+    overflow: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+#nm-lightbox[aria-hidden="false"] {
+    display: flex;
+}
+
+/* centre le dialogue */
+.nm-lightbox__dialog {
+    margin: auto;
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+/* image — taille contrôlée, jamais coupée, toujours centrée */
+.nm-lightbox__img {
+    display: block;
+    max-width: 100%;
+    max-height: 60vh;
+    margin: auto;
+    object-fit: contain;
+}
+
+/* overlay clickable pour fermer */
+.nm-lightbox__overlay {
+    position: fixed;
+    inset: 0;
+    cursor: pointer;
+}
+
+/* Bouton de fermeture (croix blanche) */
+.nm-lightbox__close {
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 70px;
+    height: 70px;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10000;
+    border: none;
+    padding: 0;
+}
+
+/* Navigation (flèches) */
+.nm-lightbox__nav {
+    position: absolute;
+    /* au lieu de fixed  */
+    top: 50%;
+    left: -250px;
+    /* négatif = en dehors du rectangle image */
+    right: -250px;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    padding: 0;
+}
+
+
+.nm-lightbox__prev,
+.nm-lightbox__next {
+    pointer-events: auto;
+    min-width: 120px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 18px;
+}
+
+
+
+.nm-lightbox__prev svg,
+.nm-lightbox__next svg {
+    fill: white;
+}
+
+.nm-lightbox__nav-text {
+    font-family: "Space Mono", monospace;
+    font-size: 14px;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.nm-lightbox__prev img,
+.nm-lightbox__next img {
+    display: block;
+}
+
+/* caption sous l'image */
+.nm-lightbox__caption {
+    max-width: 90vw;
+    margin: 20px auto 0;
+    display: flex;
+    justify-content: space-between;
+    font-family: "Space Mono", monospace;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #fff;
+}
+
+/* ====== TABLETTE (resp. écart réduit) ====== */
+@media (max-width:1024px) {
+
+    .nm-lightbox__nav {
+        left: -160px;
+        right: -160px;
+    }
+
+    .nm-lightbox__prev,
+    .nm-lightbox__next {
+        flex-direction: column;
+        /* TEXTE AU-DESSUS */
+        gap: 4px;
+    }
+
+    .nm-lightbox__close {
+        top: -75px;
+        right: -75px;
+        width: 42px;
+        height: 42px;
+    }
+}
+
+
+/* ====== MOBILE — flèches SOUS l'image en COLONNE ====== */
+@media (max-width:640px) {
+
+    .nm-lightbox__nav {
+        position: static;
+        margin-top: 20px;
+        flex-direction: row;
+        justify-content: space-between;
+        transform: none;
+        left: auto;
+        right: auto;
+    }
+
+    .nm-lightbox__prev,
+    .nm-lightbox__next {
+        flex-direction: column;
+        /* TEXTE AU-DESSUS */
+        gap: 4px;
+    }
+
+    .nm-lightbox__close {
+        top: -12px;
+        right: -12px;
+        width: 34px;
+        height: 34px;
+    }
+}

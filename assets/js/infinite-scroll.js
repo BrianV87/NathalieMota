@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // État initial des filtres (lu depuis l'URL propre)
+  // --- État global courant des filtres ---
   const state = {
     categorie: "",
     format: "",
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const initialPerPage = 8;
   const postsPerPage = 2;
 
-  // Lire les paramètres depuis l'URL (slugs dans le path)
+  // --- Lit les filtres depuis l'URL propre (/categorie/slug/...) ---
   function readParamsFromURL() {
     const pathParts = window.location.pathname.split("/").filter(Boolean);
     const categorieIndex = pathParts.indexOf("categorie");
@@ -32,11 +32,10 @@ document.addEventListener("DOMContentLoaded", () => {
     state.format = formatIndex !== -1 ? pathParts[formatIndex + 1] : "";
     state.ordre = ordreIndex !== -1 ? pathParts[ordreIndex + 1] : "recentes";
 
-    // Mise à jour de l'UI
     applyStateToUI();
   }
 
-  // Appliquer l'état aux dropdowns
+  // --- Affiche l'état dans les dropdowns ---
   function applyStateToUI() {
     dropdowns.forEach((dropdown) => {
       const key = dropdown.dataset.filter;
@@ -62,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Configurer les dropdowns
+  // --- Écouteurs dropdowns (ouverture, choix item, reload) ---
   function setupDropdowns() {
     dropdowns.forEach((dropdown) => {
       const toggle = dropdown.querySelector(".dropdown__toggle");
@@ -81,17 +80,17 @@ document.addEventListener("DOMContentLoaded", () => {
         item.addEventListener("click", (e) => {
           e.preventDefault();
           state[key] = item.dataset.value || "";
-          updateURL(); // Met à jour l'URL avec des slugs propres
+          updateURL();
           dropdown.classList.remove("is-open");
           applyStateToUI();
           currentPage = 1;
-          loadPage(true); // Replace
+          loadPage(true); // replace la liste
         });
       });
     });
   }
 
-  // Mettre à jour l'URL (redirige vers la page d'accueil si aucun filtre n'est actif)
+  // --- Met à jour l'URL propre selon les filtres actifs ---
   function updateURL() {
     let basePath = window.location.origin;
     const pathSegments = [];
@@ -100,12 +99,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (state.format) pathSegments.push("format", state.format);
     if (state.ordre !== "recentes") pathSegments.push("ordre", state.ordre);
 
-    // Si aucun filtre n'est actif, rediriger vers la page d'accueil
     const newPath = pathSegments.length ? `/${pathSegments.join("/")}/` : "/";
     history.replaceState(null, "", basePath + newPath);
   }
 
-  // Charger les photos (AJAX)
+  // --- Charge les photos (AJAX) : replace ou append ---
   function loadPage(replace = false) {
     if (loading) return;
     loading = true;
@@ -148,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
           currentPage++;
         }
 
-        // Masquer le bouton si plus de résultats
+        // Cache le bouton si plus rien à charger
         const temp = document.createElement("div");
         temp.innerHTML = trimmed;
         const count = temp.querySelectorAll(".photo-block").length;
@@ -162,19 +160,20 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  // Initialisation
+  // --- Fermer tous les dropdowns si clic en dehors ---
   document.addEventListener("click", () => {
     document.querySelectorAll(".dropdown.is-open").forEach((d) => {
       d.classList.remove("is-open");
     });
   });
 
+  // --- INIT ---
   readParamsFromURL();
   applyStateToUI();
   setupDropdowns();
   loadMoreBtn.addEventListener("click", () => loadPage(false));
 
-  // Charger la première page si filtres actifs
+  // Charger si filtres actifs
   if (state.categorie || state.format || state.ordre !== "recentes") {
     loadPage(true);
   }

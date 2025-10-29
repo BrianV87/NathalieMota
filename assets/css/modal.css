@@ -1,3 +1,7 @@
+/* =========================================================
+   OVERLAY GLOBAL (fond noir semi-transparent)
+========================================================= */
+
 .contact-overlay {
     position: fixed;
     inset: 0;
@@ -7,13 +11,18 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity .25s, visibility .25s;
-    z-index: 300
+    z-index: 300;
 }
 
 .contact-overlay.is-open {
     opacity: 1;
-    visibility: visible
+    visibility: visible;
 }
+
+
+/* =========================================================
+   MODAL CONTAINER
+========================================================= */
 
 .contact-modal {
     position: relative;
@@ -25,20 +34,30 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 80px 10px
+    padding: 0 80px 10px;
 }
+
+
+/* =========================================================
+   IMAGE EN-TÊTE
+========================================================= */
 
 .modal-header-image {
     position: relative;
     width: 1000px;
-    margin: 5px -5px 0
+    margin: 5px -5px 0;
 }
 
 .modal-header-image img {
     width: 100%;
     display: block;
-    object-fit: cover
+    object-fit: cover;
 }
+
+
+/* =========================================================
+   BOUTON CLOSE
+========================================================= */
 
 .modal-close {
     position: absolute;
@@ -50,38 +69,49 @@
     color: var(--black);
     cursor: pointer;
     transition: transform .2s;
-    z-index: 2
+    z-index: 2;
 }
 
 .modal-close:hover {
-    transform: scale(1.2)
+    transform: scale(1.2);
 }
+
+
+/* =========================================================
+   CONTENU (FORMULAIRE)
+========================================================= */
 
 .modal-body {
     width: 60%;
     display: flex;
     flex-direction: column;
     gap: 24px;
-    margin-top: 40px
+    margin-top: 40px;
 }
 
 .wpcf7-form {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    text-align: start
+    text-align: start;
 }
 
+
+/* Labels */
 .wpcf7-form label {
     font-family: "Space Mono", monospace;
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: .1em;
     color: var(--black);
-    margin-bottom: 5px
+    margin-bottom: 5px;
 }
 
-.wpcf7-form input[type=text], .wpcf7-form input[type=email], .wpcf7-form textarea {
+
+/* Inputs + textarea */
+.wpcf7-form input[type=text],
+.wpcf7-form input[type=email],
+.wpcf7-form textarea {
     width: 100%;
     border: 1px solid #C4C4C4;
     border-radius: 10px;
@@ -91,18 +121,21 @@
     outline: 0;
     color: var(--black);
     background: #fff;
-    transition: border .2s
+    transition: border .2s;
 }
 
-.wpcf7-form input:focus, .wpcf7-form textarea:focus {
-    border-color: var(--black)
+.wpcf7-form input:focus,
+.wpcf7-form textarea:focus {
+    border-color: var(--black);
 }
 
 .wpcf7-form textarea {
     min-height: 160px;
-    resize: vertical
+    resize: vertical;
 }
 
+
+/* Bouton submit */
 .wpcf7-form .wpcf7-submit {
     width: 100%;
     background: #D8D8D8;
@@ -115,25 +148,31 @@
     letter-spacing: .06em;
     cursor: pointer;
     transition: .3s;
-    text-align: center
+    text-align: center;
 }
 
 .wpcf7-form .wpcf7-submit:hover {
     background: var(--black);
-    color: #fff
+    color: #fff;
 }
 
-@media(max-width:640px) {
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width:640px) {
+
     .contact-modal {
-        padding: 0 28px 40px
+        padding: 0 28px 40px;
     }
 
     .modal-body {
         width: 100%;
-        margin-top: 30px
+        margin-top: 30px;
     }
 
     .wpcf7-form textarea {
-        min-height: 120px
+        min-height: 120px;
     }
 }

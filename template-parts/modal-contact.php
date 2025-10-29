@@ -9,7 +9,6 @@
     <div class="contact-modal">
         <button class="modal-close" aria-label="Fermer">&times;</button>
 
-        <!-- Image en-tête -->
         <div class="modal-header-image">
             <img src="http://nathaliemota.local/wp-content/uploads/2025/10/Contact-header.png" alt="Contact Nathalie Mota">
         </div>

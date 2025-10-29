@@ -58,6 +58,12 @@
     height: 118px;
 }
 
+.second-arrows a {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
 .single-photo__row.first-row .single-photo__col-left {
     border-bottom: 1px solid #111;
     margin-right: 1rem;

@@ -1,4 +1,6 @@
-/* ============= G R I D — galerie photo (2 colonnes comme avant) ============= */
+/* =========================================================
+   GRILLE GALERIE (2 colonnes desktop → 1 colonne mobile)
+========================================================= */
 
 .photos-grid,
 .related-photos__list,
@@ -11,7 +13,7 @@
     margin-top: 3rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width:768px) {
 
     .photos-grid,
     .related-photos__list,
@@ -23,7 +25,10 @@
     }
 }
 
-/* ============= C A R D / IMAGE ============= */
+
+/* =========================================================
+   CARTE PHOTO
+========================================================= */
 
 .photo-card {
     position: relative;
@@ -34,12 +39,14 @@
 .photo-card__media img {
     width: 100%;
     height: 50vh;
-    /* identique à ton ancien related-photos__list img */
     object-fit: cover;
     display: block;
 }
 
-/* ============= OVERLAY ============= */
+
+/* =========================================================
+   OVERLAY HOVER
+========================================================= */
 
 .photo-card__overlay {
     position: absolute;
@@ -60,7 +67,10 @@
     pointer-events: auto;
 }
 
-/* ============= BOUTONS ============= */
+
+/* =========================================================
+   BOUTONS (plein écran / œil)
+========================================================= */
 
 .photo-card__btn {
     background: none;
@@ -70,17 +80,22 @@
     color: #fff;
 }
 
+/* Bouton fullscreen (haut droite) */
 .photo-card__btn--fullscreen {
     position: absolute;
     top: 1rem;
     right: 1rem;
 }
 
+/* Bouton œil (centre) */
 .photo-card__btn--eye {
     margin: auto 0;
 }
 
-/* ============= INFOS EN BAS ============= */
+
+/* =========================================================
+   MÉTA (refs & infos bas)
+========================================================= */
 
 .photo-card__meta {
     position: absolute;
@@ -93,9 +108,11 @@
     font-size: .85rem;
 }
 
-/* === Hover : œil centré + fullscreen en haut-droite === */
 
-/* Overlay : centre tout correctement */
+/* =========================================================
+   Version overlay 2 : centrage strict + tailles icônes
+========================================================= */
+
 .photo-card__overlay {
     background: rgba(0, 0, 0, .8);
     display: flex;
@@ -103,7 +120,6 @@
     justify-content: center;
 }
 
-/* Œil centré — SAFE FULL VISIBLE */
 .photo-card__btn--eye {
     position: absolute;
     left: 50%;
@@ -123,8 +139,6 @@
     display: block;
 }
 
-
-/* Fullscreen : petit, en haut-droite */
 .photo-card__btn--fullscreen {
     position: absolute;
     top: 12px;
@@ -143,7 +157,6 @@
     object-fit: cover;
 }
 
-/* Légendes bas : un poil de marge pour respirer */
 .photo-card__meta {
     bottom: 12px;
     left: 12px;
@@ -151,8 +164,12 @@
     font-size: .9rem;
 }
 
-/* Responsive : un peu plus gros sur mobile */
-@media (max-width: 640px) {
+
+/* =========================================================
+   RESPONSIVE — boutons + tailles
+========================================================= */
+
+@media (max-width:640px) {
     .photo-card__btn--eye {
         width: 52px;
         height: 52px;
@@ -177,7 +194,10 @@
 }
 
 
-/* LIGHTBOX RESET STABLE */
+/* =========================================================
+   LIGHTBOX — CONTAINER GLOBAL
+========================================================= */
+
 #nm-lightbox {
     position: fixed;
     inset: 0;
@@ -193,7 +213,7 @@
     display: flex;
 }
 
-/* centre le dialogue */
+/* Dialogue centré */
 .nm-lightbox__dialog {
     margin: auto;
     position: relative;
@@ -201,7 +221,7 @@
     max-height: 90vh;
 }
 
-/* image — taille contrôlée, jamais coupée, toujours centrée */
+/* Image affichée */
 .nm-lightbox__img {
     display: block;
     max-width: 100%;
@@ -210,14 +230,17 @@
     object-fit: contain;
 }
 
-/* overlay clickable pour fermer */
+
+/* =========================================================
+   OVERLAY + FERMETURE
+========================================================= */
+
 .nm-lightbox__overlay {
     position: fixed;
     inset: 0;
     cursor: pointer;
 }
 
-/* Bouton de fermeture (croix blanche) */
 .nm-lightbox__close {
     position: absolute;
     top: -100px;
@@ -234,13 +257,15 @@
     padding: 0;
 }
 
-/* Navigation (flèches) */
+
+/* =========================================================
+   NAVIGATION (prev/next)
+========================================================= */
+
 .nm-lightbox__nav {
     position: absolute;
-    /* au lieu de fixed  */
     top: 50%;
     left: -250px;
-    /* négatif = en dehors du rectangle image */
     right: -250px;
     transform: translateY(-50%);
     display: flex;
@@ -248,7 +273,6 @@
     pointer-events: none;
     padding: 0;
 }
-
 
 .nm-lightbox__prev,
 .nm-lightbox__next {
@@ -264,8 +288,6 @@
     gap: 10px;
     padding: 0 18px;
 }
-
-
 
 .nm-lightbox__prev svg,
 .nm-lightbox__next svg {
@@ -284,7 +306,11 @@
     display: block;
 }
 
-/* caption sous l'image */
+
+/* =========================================================
+   CAPTION BAS DE LIGHTBOX
+========================================================= */
+
 .nm-lightbox__caption {
     max-width: 90vw;
     margin: 20px auto 0;
@@ -296,7 +322,11 @@
     color: #fff;
 }
 
-/* ====== TABLETTE (resp. écart réduit) ====== */
+
+/* =========================================================
+   RESPONSIVE — TABLETTE
+========================================================= */
+
 @media (max-width:1024px) {
 
     .nm-lightbox__nav {
@@ -307,7 +337,6 @@
     .nm-lightbox__prev,
     .nm-lightbox__next {
         flex-direction: column;
-        /* TEXTE AU-DESSUS */
         gap: 4px;
     }
 
@@ -320,7 +349,11 @@
 }
 
 
-/* ====== MOBILE — flèches SOUS l'image en COLONNE ====== */
+/* =========================================================
+   RESPONSIVE — MOBILE
+   (flèches sous l'image)
+========================================================= */
+
 @media (max-width:640px) {
 
     .nm-lightbox__nav {
@@ -336,7 +369,6 @@
     .nm-lightbox__prev,
     .nm-lightbox__next {
         flex-direction: column;
-        /* TEXTE AU-DESSUS */
         gap: 4px;
     }
 

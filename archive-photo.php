@@ -150,7 +150,7 @@ get_header();
 
         <!-- Bouton Load More -->
         <div class="load-more-wrapper">
-            <button id="load-more" class="btn-load-more">Charger plus</button>
+            <button id="load-more" class="btn-load-more" data-ppp="8">Charger plus</button>
         </div>
 
     </section>

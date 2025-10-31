@@ -25,7 +25,6 @@
     }
 }
 
-
 /* =========================================================
    CARTE PHOTO
 ========================================================= */
@@ -34,6 +33,8 @@
     position: relative;
     overflow: hidden;
     background: #000;
+    z-index: 1;
+    /* ← Base pour la hiérarchie */
 }
 
 .photo-card__media img {
@@ -42,7 +43,6 @@
     object-fit: cover;
     display: block;
 }
-
 
 /* =========================================================
    OVERLAY HOVER
@@ -55,10 +55,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, .65);
+    background: rgba(0, 0, 0, .8);
     opacity: 0;
     transition: opacity .3s ease;
     pointer-events: none;
+    z-index: 2;
+    /* ← Au-dessus de l'image */
 }
 
 .photo-card:hover .photo-card__overlay,
@@ -67,9 +69,8 @@
     pointer-events: auto;
 }
 
-
 /* =========================================================
-   BOUTONS (plein écran / œil)
+   BOUTONS (plein écran / œil) — FIX CRITIQUE
 ========================================================= */
 
 .photo-card__btn {
@@ -78,48 +79,38 @@
     cursor: pointer;
     padding: 0;
     color: #fff;
+    position: relative;
+    z-index: 4;
+    /* ← AU-DESSUS de tout dans la carte */
+    pointer-events: auto;
+    /* ← FORCE les clics */
 }
 
 /* Bouton fullscreen (haut droite) */
 .photo-card__btn--fullscreen {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-}
-
-/* Bouton œil (centre) */
-.photo-card__btn--eye {
-    margin: auto 0;
-}
-
-
-/* =========================================================
-   MÉTA (refs & infos bas)
-========================================================= */
-
-.photo-card__meta {
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
-    right: 1rem;
-    display: flex;
-    justify-content: space-between;
-    color: #fff;
-    font-size: .85rem;
-}
-
-
-/* =========================================================
-   Version overlay 2 : centrage strict + tailles icônes
-========================================================= */
-
-.photo-card__overlay {
-    background: rgba(0, 0, 0, .8);
+    top: 12px;
+    right: 12px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 5 !important;
+    /* ← Priorité maximale */
+    pointer-events: auto !important;
 }
 
+.photo-card__btn--fullscreen img {
+    width: 40px;
+    height: 40px;
+    display: block;
+    object-fit: cover;
+    pointer-events: none;
+    /* ← L'image ne bloque pas les clics */
+}
+
+/* Bouton œil (centre) */
 .photo-card__btn--eye {
     position: absolute;
     left: 50%;
@@ -130,6 +121,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 4;
 }
 
 .photo-card__btn--eye img {
@@ -137,33 +129,24 @@
     max-height: 100%;
     object-fit: contain;
     display: block;
+    pointer-events: none;
 }
 
-.photo-card__btn--fullscreen {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.photo-card__btn--fullscreen img {
-    width: 40px;
-    height: 40px;
-    display: block;
-    object-fit: cover;
-}
+/* =========================================================
+   MÉTA (refs & infos bas)
+========================================================= */
 
 .photo-card__meta {
+    position: absolute;
     bottom: 12px;
     left: 12px;
     right: 12px;
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
     font-size: .9rem;
+    z-index: 3;
 }
-
 
 /* =========================================================
    RESPONSIVE — boutons + tailles
@@ -193,9 +176,8 @@
     }
 }
 
-
 /* =========================================================
-   LIGHTBOX — CONTAINER GLOBAL
+   LIGHTBOX — CONTAINER GLOBAL (FIX z-index)
 ========================================================= */
 
 #nm-lightbox {
@@ -203,7 +185,8 @@
     inset: 0;
     background: rgba(0, 0, 0, .8);
     display: none;
-    z-index: 99999;
+    z-index: 500 !important;
+    /* ← AU-DESSUS DE TOUT */
     overflow: auto;
     align-items: center;
     justify-content: center;
@@ -219,6 +202,7 @@
     position: relative;
     max-width: 90vw;
     max-height: 90vh;
+    z-index: 501;
 }
 
 /* Image affichée */
@@ -230,7 +214,6 @@
     object-fit: contain;
 }
 
-
 /* =========================================================
    OVERLAY + FERMETURE
 ========================================================= */
@@ -239,6 +222,7 @@
     position: fixed;
     inset: 0;
     cursor: pointer;
+    z-index: 500;
 }
 
 .nm-lightbox__close {
@@ -252,11 +236,11 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 10000;
+    z-index: 502;
+    /* ← Corrigé pour être au-dessus du dialog */
     border: none;
     padding: 0;
 }
-
 
 /* =========================================================
    NAVIGATION (prev/next)
@@ -272,6 +256,7 @@
     justify-content: space-between;
     pointer-events: none;
     padding: 0;
+    z-index: 502;
 }
 
 .nm-lightbox__prev,
@@ -306,7 +291,6 @@
     display: block;
 }
 
-
 /* =========================================================
    CAPTION BAS DE LIGHTBOX
 ========================================================= */
@@ -322,13 +306,11 @@
     color: #fff;
 }
 
-
 /* =========================================================
    RESPONSIVE — TABLETTE
 ========================================================= */
 
 @media (max-width:1024px) {
-
     .nm-lightbox__nav {
         left: -160px;
         right: -160px;
@@ -348,14 +330,12 @@
     }
 }
 
-
 /* =========================================================
    RESPONSIVE — MOBILE
    (flèches sous l'image)
 ========================================================= */
 
 @media (max-width:640px) {
-
     .nm-lightbox__nav {
         position: static;
         margin-top: 20px;

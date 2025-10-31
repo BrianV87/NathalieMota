@@ -2,13 +2,13 @@
 // ========================================
 // Sécurité — empêche l'accès direct
 // ========================================
-if ( ! defined('ABSPATH') ) exit;
+if (! defined('ABSPATH')) exit;
 
 // ========================================
 // Configuration du thème (supports + menus)
 // ========================================
-function nathalie_mota_setup() {
-
+function nathalie_mota_setup()
+{
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
 
@@ -29,8 +29,8 @@ add_action('after_setup_theme', 'nathalie_mota_setup');
 // ========================================
 // Chargement des assets (CSS / JS)
 // ========================================
-function nathalie_mota_assets() {
-
+function nathalie_mota_assets()
+{
     // ---------- Polices ----------
     wp_enqueue_style(
         'nm-fonts',
@@ -102,8 +102,8 @@ add_action('wp_enqueue_scripts', 'nathalie_mota_assets');
 // ========================================
 // CPT : Photo
 // ========================================
-function nm_register_post_type_photo() {
-
+function nm_register_post_type_photo()
+{
     $labels = [
         'name'               => 'Photos',
         'singular_name'      => 'Photo',
@@ -134,13 +134,11 @@ function nm_register_post_type_photo() {
 }
 add_action('init', 'nm_register_post_type_photo', 0);
 
-
 // ========================================
 // Taxonomies : Catégorie & Format
 // ========================================
-function nm_register_photo_taxonomies() {
-
-    // ---------- Catégories (hiérarchiques) ----------
+function nm_register_photo_taxonomies()
+{
     register_taxonomy('categorie', ['photo'], [
         'labels'       => ['name' => 'Catégories', 'singular_name' => 'Catégorie'],
         'hierarchical' => true,
@@ -149,7 +147,6 @@ function nm_register_photo_taxonomies() {
         'rewrite'      => ['slug' => 'categorie'],
     ]);
 
-    // ---------- Formats (hiérarchiques aussi ici) ----------
     register_taxonomy('format', ['photo'], [
         'labels'       => ['name' => 'Formats', 'singular_name' => 'Format'],
         'hierarchical' => true,
@@ -160,22 +157,22 @@ function nm_register_photo_taxonomies() {
 }
 add_action('init', 'nm_register_photo_taxonomies', 1);
 
-
 // ========================================
 // Flush des permaliens à l'activation thème
 // ========================================
-function nm_flush_rewrite_on_switch() {
+function nm_flush_rewrite_on_switch()
+{
     nm_register_post_type_photo();
     nm_register_photo_taxonomies();
     flush_rewrite_rules();
 }
 add_action('after_switch_theme', 'nm_flush_rewrite_on_switch');
 
-
 // ========================================
 // Metabox "Informations de la photo"
 // ========================================
-function nm_add_photo_metaboxes() {
+function nm_add_photo_metaboxes()
+{
     add_meta_box(
         'photo_infos',
         'Informations de la photo',
@@ -187,13 +184,13 @@ function nm_add_photo_metaboxes() {
 }
 add_action('add_meta_boxes', 'nm_add_photo_metaboxes');
 
-
-function nm_render_photo_metabox($post) {
+function nm_render_photo_metabox($post)
+{
     wp_nonce_field('nm_save_photo_meta', 'nm_photo_meta_nonce');
     $reference = get_post_meta($post->ID, '_reference', true);
     $annee     = get_post_meta($post->ID, '_annee', true);
     $type      = get_post_meta($post->ID, '_type', true);
-    ?>
+?>
     <div style="display:grid;gap:12px;max-width:420px;">
         <label><strong>Référence :</strong><br>
             <input type="text" name="photo_reference" value="<?php echo esc_attr($reference); ?>" style="width:100%">
@@ -211,17 +208,16 @@ function nm_render_photo_metabox($post) {
             </select>
         </label>
     </div>
-    <?php
+<?php
 }
-
 
 // ========================================
 // Sauvegarde sécurisée des métadonnées
 // ========================================
-function nm_save_photo_fields($post_id) {
-
+function nm_save_photo_fields($post_id)
+{
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
-    if (!isset($_POST['nm_photo_meta_nonce']) || !wp_verify_nonce($_POST['nm_photo_meta_nonce'],'nm_save_photo_meta')) return;
+    if (!isset($_POST['nm_photo_meta_nonce']) || !wp_verify_nonce($_POST['nm_photo_meta_nonce'], 'nm_save_photo_meta')) return;
     if (!current_user_can('edit_post', $post_id)) return;
 
     $fields = [
@@ -248,26 +244,34 @@ add_image_size('photo_large', 1600, 0, false);
 add_image_size('photo_medium', 1024, 0, false);
 add_image_size('photo_small', 600, 0, false);
 
-
 // ========================================
 // AJAX : Load more photos
 // ========================================
 add_action('wp_ajax_load_more_photos', 'nm_load_more_photos');
 add_action('wp_ajax_nopriv_load_more_photos', 'nm_load_more_photos');
-
-function nm_load_more_photos() {
-
-    $ppp    = isset($_GET['ppp'])    ? max(1,(int)$_GET['ppp'])    : 2;
-    $offset = isset($_GET['offset']) ? max(0,(int)$_GET['offset']) : 0;
-
+function nm_load_more_photos()
+{
+    $ppp    = isset($_GET['ppp'])    ? max(1, (int)$_GET['ppp'])    : 8;
+    $offset = isset($_GET['offset']) ? max(0, (int)$_GET['offset']) : 0;
     $tax_query = [];
+
     if (!empty($_GET['categorie'])) {
-        $tax_query[] = ['taxonomy'=>'categorie','field'=>'slug','terms'=>sanitize_title($_GET['categorie'])];
+        $tax_query[] = [
+            'taxonomy' => 'categorie',
+            'field'    => 'slug',
+            'terms'    => sanitize_title($_GET['categorie'])
+        ];
     }
     if (!empty($_GET['format'])) {
-        $tax_query[] = ['taxonomy'=>'format','field'=>'slug','terms'=>sanitize_title($_GET['format'])];
+        $tax_query[] = [
+            'taxonomy' => 'format',
+            'field'    => 'slug',
+            'terms'    => sanitize_title($_GET['format'])
+        ];
     }
-    if (count($tax_query)>1) $tax_query['relation']='AND';
+    if (count($tax_query) > 1) {
+        $tax_query['relation'] = 'AND';
+    }
 
     $ordre = isset($_GET['ordre']) ? sanitize_text_field($_GET['ordre']) : 'recentes';
     $order = ($ordre === 'anciennes') ? 'ASC' : 'DESC';
@@ -280,19 +284,25 @@ function nm_load_more_photos() {
         'order'               => $order,
         'ignore_sticky_posts' => true,
         'no_found_rows'       => true,
+        'post_status'         => 'publish',
+        'update_post_term_cache' => false,
+        'update_post_meta_cache' => false,
     ];
-    if ($tax_query) $args['tax_query']=$tax_query;
+
+    if ($tax_query) {
+        $args['tax_query'] = $tax_query;
+    }
 
     $q = new WP_Query($args);
+    $output = '';
 
-    $output='';
     if ($q->have_posts()) {
         while ($q->have_posts()) {
             $q->the_post();
-            $photo=get_post();
+            $photo = get_post();
             ob_start();
             include locate_template('template-parts/photo-block.php');
-            $output.=ob_get_clean();
+            $output .= ob_get_clean();
         }
         wp_reset_postdata();
     }
@@ -301,18 +311,39 @@ function nm_load_more_photos() {
     wp_die();
 }
 
-
 // ========================================
 // Réécriture des URL propres (filters front)
 // ========================================
-add_action('init','nm_custom_rewrite_rules');
-
-function nm_custom_rewrite_rules() {
-
-    add_rewrite_rule('^categorie/([^/]+)/?$','index.php?post_type=photo&categorie=$matches[1]','top');
-    add_rewrite_rule('^format/([^/]+)/?$','index.php?post_type=photo&format=$matches[1]','top');
-    add_rewrite_rule('^categorie/([^/]+)/format/([^/]+)/?$','index.php?post_type=photo&categorie=$matches[1]&format=$matches[2]','top');
-    add_rewrite_rule('^categorie/([^/]+)/ordre/([^/]+)/?$','index.php?post_type=photo&categorie=$matches[1]&ordre=$matches[2]','top');
-    add_rewrite_rule('^format/([^/]+)/ordre/([^/]+)/?$','index.php?post_type=photo&format=$matches[1]&ordre=$matches[2]','top');
-    add_rewrite_rule('^categorie/([^/]+)/format/([^/]+)/ordre/([^/]+)/?$','index.php?post_type=photo&categorie=$matches[1]&format=$matches[2]&ordre=$matches[3]','top');
+add_action('init', 'nm_custom_rewrite_rules');
+function nm_custom_rewrite_rules()
+{
+    add_rewrite_rule('^categorie/([^/]+)/?$', 'index.php?post_type=photo&categorie=$matches[1]', 'top');
+    add_rewrite_rule('^format/([^/]+)/?$', 'index.php?post_type=photo&format=$matches[1]', 'top');
+    add_rewrite_rule('^categorie/([^/]+)/format/([^/]+)/?$', 'index.php?post_type=photo&categorie=$matches[1]&format=$matches[2]', 'top');
+    add_rewrite_rule('^categorie/([^/]+)/ordre/([^/]+)/?$', 'index.php?post_type=photo&categorie=$matches[1]&ordre=$matches[2]', 'top');
+    add_rewrite_rule('^format/([^/]+)/ordre/([^/]+)/?$', 'index.php?post_type=photo&format=$matches[1]&ordre=$matches[2]', 'top');
+    add_rewrite_rule('^categorie/([^/]+)/format/([^/]+)/ordre/([^/]+)/?$', 'index.php?post_type=photo&categorie=$matches[1]&format=$matches[2]&ordre=$matches[3]', 'top');
 }
+
+// ========================================
+// ♻️ GREEN CODE — Optimisations écologiques et performance
+// ========================================
+
+// Support HTML5 (balises plus légères et sémantiques)
+add_action('after_setup_theme', function () {
+    add_theme_support('html5', ['search-form', 'gallery', 'caption', 'comment-form', 'comment-list']);
+});
+
+// Supprime les tailles d’images inutiles (évite de générer trop de fichiers)
+add_filter('intermediate_image_sizes_advanced', function ($sizes) {
+    unset($sizes['medium_large'], $sizes['1536x1536'], $sizes['2048x2048']);
+    return $sizes;
+});
+
+// Ajoute "defer" à tous les scripts personnalisés du thème (pour améliorer le temps de chargement)
+add_filter('script_loader_tag', function ($tag, $handle) {
+    if (strpos($handle, 'nm-') === 0) {
+        return str_replace(' src', ' defer src', $tag);
+    }
+    return $tag;
+}, 10, 2);

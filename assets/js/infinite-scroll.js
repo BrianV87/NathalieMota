@@ -17,8 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentPage = 1;
   let loading = false;
-  const initialPerPage = 8;
-  const postsPerPage = 2;
+
+  // --- Nombre d'éléments à charger ---
+  const initialPerPage = 8; // première série
+  const postsPerPage = parseInt(loadMoreBtn.dataset.ppp || 8, 10); // ensuite
 
   // --- Lit les filtres depuis l'URL propre (/categorie/slug/...) ---
   function readParamsFromURL() {
@@ -112,15 +114,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const offset = replace
       ? 0
-      : document.querySelectorAll(".photo-block").length;
-    const ppp = replace ? initialPerPage : postsPerPage;
-    const usp = new URLSearchParams();
+      : document.querySelectorAll(".photo-card").length;
+    const ppp = 8;
 
+    const usp = new URLSearchParams();
     usp.set("action", "load_more_photos");
     usp.set("ppp", String(ppp));
     usp.set("offset", String(offset));
     usp.set("ordre", state.ordre);
-
     if (state.categorie) usp.set("categorie", state.categorie);
     if (state.format) usp.set("format", state.format);
 
@@ -142,17 +143,32 @@ document.addEventListener("DOMContentLoaded", () => {
             trimmed || "<p class='no-results'>Aucune photo trouvée.</p>";
           currentPage = 1;
         } else if (trimmed) {
-          photoList.insertAdjacentHTML("beforeend", trimmed);
-          currentPage++;
+          const temp = document.createElement("div");
+          temp.innerHTML = trimmed;
+          const newPhotos = temp.querySelectorAll(".photo-card");
+          const existingIds = Array.from(
+            photoList.querySelectorAll(".photo-card")
+          ).map((el) => el.dataset.id);
+          let uniquePhotosAdded = 0;
+          newPhotos.forEach((photo) => {
+            if (!existingIds.includes(photo.dataset.id)) {
+              photoList.appendChild(photo);
+              uniquePhotosAdded++;
+            }
+          });
+          // Masque le bouton si moins de 8 photos uniques ajoutées
+          if (uniquePhotosAdded < ppp) {
+            loadMoreBtn.style.display = "none";
+          }
+        } else {
+          // Si aucune photo n'est retournée, masque le bouton
+          loadMoreBtn.style.display = "none";
         }
-
-        // Cache le bouton si plus rien à charger
-        const temp = document.createElement("div");
-        temp.innerHTML = trimmed;
-        const count = temp.querySelectorAll(".photo-block").length;
-        loadMoreBtn.style.display = count === 0 ? "none" : "";
       })
-      .catch((err) => console.error("Erreur AJAX :", err))
+      .catch((err) => {
+        console.error("Erreur AJAX :", err);
+        loadMoreBtn.style.display = "none"; // Masque le bouton en cas d'erreur
+      })
       .finally(() => {
         loadMoreBtn.textContent = "Charger plus";
         loadMoreBtn.disabled = false;

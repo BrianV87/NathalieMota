@@ -1,57 +1,64 @@
 /* =========================================================
-   MOBILE MENU (PANEL SLIDE)
+   MOBILE MENU — PANEL SLIDE
 ========================================================= */
-
 .mobile-menu {
     position: fixed;
     inset: 0;
-    background: var(--red);
+    background: #fff;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     transform: translateX(100%);
-    /* caché par défaut (hors écran à droite) */
-    transition: transform .35s ease-in-out;
-    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+    z-index: 200;
+    overflow-y: auto;
 }
 
 .mobile-menu.is-open {
     transform: translateX(0);
-    /* affiché */
+    opacity: 1;
+    pointer-events: auto;
 }
 
 
 /* =========================================================
-   HEADER DU PANEL (barre avec close)
-========================================================= */
-
+     BARRE DU HAUT (logo + bouton X)
+  ========================================================= */
 .mobile-menu-header {
-    height: var(--header-h);
+    height: 80px;
     background: #fff;
+    border-bottom: 1px solid #eee;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 24px;
 }
 
-.mobile-menu-close {
-    border: 0;
-    background: 0;
-    font-size: 28px;
-    color: #000;
-    cursor: pointer;
+.mobile-menu-header img {
+    width: auto;
 }
 
+.mobile-menu-close {
+    background: none;
+    border: none;
+    font-size: 36px;
+    color: #000;
+    cursor: pointer;
+    line-height: 1;
+}
 
 /* =========================================================
-   NAVIGATION INTERNE DU MENU
-========================================================= */
-
+     ZONE ROUGE DE NAVIGATION
+  ========================================================= */
 .mobile-menu-nav {
     flex: 1;
+    background: var(--red, #d32f2f);
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 40px 0;
 }
 
 .menu-mobile {
@@ -69,38 +76,34 @@
     text-decoration: none;
     font-family: "Space Mono", monospace;
     text-transform: uppercase;
-    letter-spacing: .1em;
-    font-size: 44px;
+    letter-spacing: 0.1em;
+    font-size: 40px;
     font-weight: 400;
-    transition: opacity .25s;
+    transition: opacity 0.25s;
 }
 
 .menu-mobile a:hover {
-    opacity: .7;
+    opacity: 0.7;
 }
 
+/* =========================================================
+     RESPONSIVE
+  ========================================================= */
+@media (max-width: 640px) {
+    .menu-mobile a {
+        font-size: 32px;
+    }
+}
 
 /* =========================================================
-   COMPENSATION ADMIN BAR (si connecté WP)
-========================================================= */
-
+     ADMIN BAR COMPENSATION (WordPress)
+  ========================================================= */
 body.admin-bar .mobile-menu {
     top: 32px;
 }
 
-@media (max-width:782px) {
+@media (max-width: 782px) {
     body.admin-bar .mobile-menu {
         top: 46px;
-    }
-}
-
-
-/* =========================================================
-   RESPONSIVE — MOBILE
-========================================================= */
-
-@media (max-width:640px) {
-    .menu-mobile a {
-        font-size: 36px;
     }
 }

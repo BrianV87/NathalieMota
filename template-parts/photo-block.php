@@ -37,7 +37,7 @@ $alt = get_the_title($photo->ID);
         ?>
 
         <!-- Overlay visible au survol (desktop) ou via JS (mobile) -->
-        <div class="photo-card__overlay" aria-hidden="true">
+        <div class="photo-card__overlay">
 
             <!-- Bouton plein écran → ouvre la lightbox -->
             <button

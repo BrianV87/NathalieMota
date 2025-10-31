@@ -48,7 +48,7 @@
 }
 
 .footer-menu a:hover {
-    color: var(--red);
+    font-weight: bold;
 }
 
 

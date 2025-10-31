@@ -18,15 +18,14 @@
                 if (function_exists('the_custom_logo') && has_custom_logo()) {
                     the_custom_logo();
                 } else {
-                    // Fallback si pas de logo défini dans le customizer
                     echo '<a href="' . esc_url(home_url('/')) . '" class="site-title">'
-                        . get_bloginfo('name') .
+                        . esc_html(get_bloginfo('name')) .
                         '</a>';
                 }
                 ?>
             </div>
 
-            <!-- Navigation principale (desktop) -->
+            <!-- Navigation principale (visible sur desktop uniquement) -->
             <nav class="site-nav">
                 <?php
                 wp_nav_menu([
@@ -38,7 +37,7 @@
             </nav>
 
             <!-- Bouton burger (mobile) -->
-            <button class="burger" aria-label="Menu mobile">
+            <button class="burger" aria-label="Ouvrir le menu">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -47,26 +46,27 @@
         </div>
     </header>
 
-
     <!-- ========================================
-     MENU MOBILE (affiché via JS)
-======================================== -->
+       MENU MOBILE (affiché via JS)
+  ======================================== -->
     <div id="mobileMenu" class="mobile-menu">
-
         <div class="mobile-menu-header">
-            <img src="http://nathaliemota.local/wp-content/uploads/2025/10/logo-nathalie-mota.png"
-                alt="Nathalie Mota">
+            <img src="http://nathaliemota.local/wp-content/uploads/2025/10/logo-nathalie-mota.png" alt="Nathalie Mota">
             <button class="mobile-menu-close" aria-label="Fermer le menu">&times;</button>
         </div>
 
         <nav class="mobile-menu-nav">
             <?php
             wp_nav_menu([
-                'theme_location' => 'main', // même menu que desktop
+                'theme_location' => 'main',
                 'container'      => false,
                 'menu_class'     => 'menu-mobile',
             ]);
             ?>
         </nav>
-
     </div>
+
+    <?php wp_footer(); ?>
+</body>
+
+</html>

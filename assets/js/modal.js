@@ -1,31 +1,32 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // --- Sélection des éléments nécessaires ---
-  const contactBtns = document.querySelectorAll("[data-modal='contact']");
+  // --- Sélection des boutons (ceux avec data-modal ET le lien du menu) ---
+  const contactBtns = document.querySelectorAll(
+    "[data-modal='contact'], a[href='#contact']"
+  );
   const modal = document.getElementById("contact-modal");
   const closeBtn = modal?.querySelector(".modal-close");
   const photoRefInput = modal?.querySelector("#photo-ref");
 
-  // --- OUVERTURE de la modale (depuis un bouton contact) ---
+  // --- OUVERTURE de la modale ---
   contactBtns.forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      const photoRef = btn.getAttribute("data-photo-ref");
+      e.preventDefault(); // empêche le scroll vers #contact
 
-      // Si un bouton contient une ref → la pré-remplir dans le formulaire
+      const photoRef = btn.getAttribute("data-photo-ref");
       if (photoRefInput && photoRef) photoRefInput.value = photoRef;
 
       modal.classList.add("is-open");
-      document.body.style.overflow = "hidden"; // bloque le scroll
+      document.body.style.overflow = "hidden";
     });
   });
 
-  // --- Fermeture via bouton X ---
+  // --- FERMETURE via bouton X ---
   closeBtn?.addEventListener("click", () => {
     modal.classList.remove("is-open");
     document.body.style.overflow = "";
   });
 
-  // --- Fermeture si on clique dans l'overlay sombre ---
+  // --- FERMETURE si clic sur fond sombre ---
   modal?.addEventListener("click", (e) => {
     if (e.target === modal) {
       modal.classList.remove("is-open");

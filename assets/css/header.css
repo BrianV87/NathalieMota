@@ -1,7 +1,6 @@
 /* =========================
    HEADER GLOBAL
 ========================= */
-
 .site-header {
     position: sticky;
     top: 0;
@@ -14,29 +13,25 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: var(--header-h);
-    max-width: var(--container);
+    height: var(--header-h, 80px);
+    max-width: var(--container, 1200px);
     margin: 0 auto;
     padding: 0 24px;
     width: 100%;
 }
 
-
 /* =========================
    LOGO
 ========================= */
-
 .brand img {
     display: block;
     width: auto;
     height: 16px;
 }
 
-
 /* =========================
    NAVIGATION DESKTOP
 ========================= */
-
 .site-nav {
     display: block;
 }
@@ -46,6 +41,8 @@
     align-items: center;
     gap: 60px;
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .menu a {
@@ -54,7 +51,7 @@
     text-transform: uppercase;
     letter-spacing: .1em;
     text-decoration: none;
-    color: var(--black);
+    color: var(--black, #000);
     transition: color .3s;
 }
 
@@ -62,19 +59,19 @@
     font-weight: bold;
 }
 
-
 /* =========================
    BURGER MENU (MOBILE)
 ========================= */
-
 .burger {
     display: none;
     width: 44px;
     height: 44px;
     border: 0;
-    background: 0;
+    background: none;
     cursor: pointer;
     position: relative;
+    z-index: 300;
+    /* au-dessus du panneau mobile */
 }
 
 .burger span {
@@ -114,11 +111,9 @@
     bottom: 21px;
 }
 
-
 /* =========================
    RESPONSIVE — TABLETTE / MOBILE
 ========================= */
-
 @media (max-width:1024px) {
     .site-nav {
         display: none;
